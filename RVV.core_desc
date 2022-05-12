@@ -75,10 +75,10 @@ InstructionSet RV32V extends RV32I{
         extern unsigned<8> vsra_vi(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pVimm, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
         extern unsigned<8> vsra_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
         extern unsigned<8> vmseq_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
-        extern unsigned<8> vmsne_vi(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pVimm, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vmseq_vi(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pVimm, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
         extern unsigned<8> vmseq_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
         extern unsigned<8> vmsne_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
-        // extern unsigned<8> vmsne_vi(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pVimm, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vmsne_vi(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pVimm, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
         extern unsigned<8> vmsne_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
         extern unsigned<8> vmsltu_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
         extern unsigned<8> vmsltu_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
@@ -1015,7 +1015,7 @@ InstructionSet RV32V extends RV32I{
             }
         }
 
-        VSRL_VI {
+        VSRA_VI {
             encoding: 0b101001 :: vm[0:0] :: vs2[4:0] :: uimm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
             args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
@@ -1075,8 +1075,8 @@ InstructionSet RV32V extends RV32I{
             }
         }
 
-        VMSEQ_VI {
-            encoding: 0b011001 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+        VMSSEQ_VI {
+            encoding: 0b011000 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
             args_disass:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
             behavior: {
 
@@ -1085,7 +1085,7 @@ InstructionSet RV32V extends RV32I{
                 unsigned<XLEN> _vl = CSR[VL_ADDR];
                 unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
 
-                unsigned<XLEN> ret = vmsne_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
+                unsigned<XLEN> ret = vmseq_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
                 if(ret != 0){
                     CSR[VSTART_ADDR] = ret >> 8;
                     raise(0, 2);
