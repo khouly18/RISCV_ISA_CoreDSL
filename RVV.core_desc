@@ -234,26 +234,26 @@ InstructionSet RV32V extends Zicsr {
 
         }
 
-        VLE_U {
-            encoding: 0b000 :: mew[0:0] :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: width[2:0] :: vd[4:0] :: 0b0000111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
-            behavior: {
+        // VLE_U {
+        //     encoding: 0b000 :: mew[0:0] :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: width[2:0] :: vd[4:0] :: 0b0000111;
+        //     args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+        //     behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _eew = vcfg_concatEEW(mew, width);
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+        //         unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+        //         unsigned<XLEN> _eew = vcfg_concatEEW(mew, width);
+        //         unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+        //         unsigned<XLEN> _vl = CSR[VL_ADDR];
+        //         unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
 
-                // unsigned<XLEN> ret = etiss_vload_encoded_unitstride(V, _vtype, vm, _eew, vd, _vstart, _vlen, _vl, X[rs1]); // V, MEM[-1],
-                // if(ret != 0){
-                //     CSR[VSTART_ADDR] = ret >> 8;
-                //     raise(0, 2);
-                // } else{
-                //     CSR[VSTART_ADDR] = 0;
-                // }
-            }
-        }
+        //         // unsigned<XLEN> ret = etiss_vload_encoded_unitstride(V, _vtype, vm, _eew, vd, _vstart, _vlen, _vl, X[rs1]); // V, MEM[-1],
+        //         // if(ret != 0){
+        //         //     CSR[VSTART_ADDR] = ret >> 8;
+        //         //     raise(0, 2);
+        //         // } else{
+        //         //     CSR[VSTART_ADDR] = 0;
+        //         // }
+        //     }
+        // }
 
         VSE_U {
             encoding: 0b000 :: mew[0:0] :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: width[2:0] :: vs3[4:0] :: 0b0100111;
