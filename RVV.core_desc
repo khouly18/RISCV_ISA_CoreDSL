@@ -1,0 +1,1690 @@
+import "RV32I.core_desc"
+import "RISCVBase.core_desc"
+
+InstructionSet RV32V extends RV32I{
+    architectural_state {
+        unsigned<32> VLEN;
+        // user-writeable
+        unsigned<32> VSTART_ADDR = 0x008;
+        unsigned<32>& VSTART_CSR = CSR[VSTART_ADDR];
+        unsigned<32> VXSAT_ADDR = 0x009;
+        unsigned<32>& VXSAT_CSR = CSR[VXSAT_ADDR];
+        unsigned<32> VXRM_ADDR = 0x00A;
+        unsigned<32>& VXRM_CSR = CSR[VXRM_ADDR];
+        unsigned<32> VCSR_ADDR = 0x00F;
+        unsigned<32>& VCSR_CSR = CSR[VCSR_ADDR];
+
+        // not user-writable
+        unsigned<32> VL_ADDR = 0xC20;
+        unsigned<32>& VL_CSR = CSR[VL_ADDR];
+        unsigned<32> VTYPE_ADDR = 0xC21;
+        unsigned<32>& VTYPE_CSR = CSR[VTYPE_ADDR];
+
+        // read-only constant csr
+        unsigned<32> VLENB_ADDR = 0xC22;
+        unsigned<32>& VLENB_CSR = CSR[VLENB_ADDR];
+
+        // vector register address space
+        extern unsigned char V[VLEN * 32];
+    }
+    functions {
+        extern unsigned<8> vtype_extractSEW(unsigned<16>);
+        extern unsigned<8> vtype_extractLMUL(unsigned<16>);
+        extern unsigned<8> vtype_extractTA(unsigned<16>);
+        extern unsigned<8> vtype_extractMA(unsigned<16>);
+        extern unsigned<8> vcfg_concatEEW(unsigned<8> mew, unsigned<8> width);
+        // TODO: etiss_vload_encoded_unitstride?
+        // TODO: etiss_vstore_encoded_unitstride?
+        extern unsigned<8> vadd_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vadd_vi(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pVimm, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vadd_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vsub_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vsub_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vwaddu_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vwaddu_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vwadd_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vwadd_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vwsubu_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vwsubu_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vwsub_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vwsub_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vwaddu_w_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vwaddu_w_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vwadd_w_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vwadd_w_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vwsubu_w_vv(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vwsubu_w_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vwsub_w_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vwsub_w_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vand_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vand_vi(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pVimm, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vand_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vor_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vor_vi(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pVimm, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vor_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vxor_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vxor_vi(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pVimm, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vxor_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vsll_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vsll_vi(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pVimm, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vsll_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vsrl_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vsrl_vi(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pVimm, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vsrl_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vsra_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vsra_vi(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pVimm, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vsra_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vmseq_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vmsne_vi(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pVimm, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vmseq_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vmsne_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        // extern unsigned<8> vmsne_vi(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pVimm, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vmsne_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vmsltu_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vmsltu_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vmslt_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vmslt_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vmsleu_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vmsleu_vi(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pVimm, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> ETISS_vmsleu_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vmsle_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vmsle_vi(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pVimm, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vmsle_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vmsgtu_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vmsgtu_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vmsgt_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vmsgt_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vmv_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vmv_vi(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pVimm, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vmv_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vmv_xs(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vmv_sx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vslideup_vi(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pVimm, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vslideup_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vslidedown_vi(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pVimm, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
+        extern unsigned<8> vslidedown_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vslide1up_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+        extern unsigned<8> vslide1down_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
+    }
+    instructions{
+        VSETVLI {
+            encoding: 0b0 :: zimm[10:0] :: rs1[4:0] :: 0b111 :: rd[4:0] :: 0b1010111;
+            args_disass:"{name(rd)}, {name(rs1)}, {zimm}";
+            behavior: {
+
+                unsigned<3> sew[3]  = vtype_extractSEW(zimm);
+                unsigned<3> lmul[3] = vtype_extractLMUL(zimm);
+                unsigned<1> vta[1]  = vtype_extractTA(zimm);
+                unsigned<1> vma[1]  = vtype_extractMA(zimm);
+
+                unsigned<32> _vlmax = 0;
+                unsigned<32> _illmask = 0;
+
+                unsigned<32> vlen = CSR[VLENB_ADDR]*8;
+
+                if (lmul & 4){
+                    unsigned<32> _illmask = (1 << (XLEN-1));
+                    if(lmul == 6){
+                        unsigned<32> _vlmax = vlen / (0x8 << sew) / 4;
+                    }else if(lmul == 7){
+                        unsigned<32> _vlmax = vlen / (0x8 << sew) / 2;
+                    }else{
+                        unsigned<32> _vlmax = vlen / (0x8 << sew) / 8;
+                    }
+                }else {
+                    unsigned<32> _illmask = (0 << (XLEN-1));
+                    if(lmul == 0){
+                        unsigned<32> _vlmax = vlen / (0x8 << sew);
+                    }else if(lmul == 1){
+                        unsigned<32> _vlmax = vlen / (0x8 << sew) *2;
+                    }else if(lmul == 2){
+                        unsigned<32> _vlmax = vlen / (0x8 << sew) *4;
+                    }else if(lmul == 3){
+                        unsigned<32> _vlmax = vlen / (0x8 << sew) *8;
+                    }
+                }
+                unsigned<32> _avl = 0;
+                if (rs1 != 0){
+                    unsigned<32> _avl = X[rs1];
+                }else if(rd != 0){
+                    unsigned<32> _avl = ~0;
+                }else{
+                    unsigned<32> _avl = CSR[VL_ADDR];
+                }
+
+                unsigned<32> _vl = 0;
+
+                if(_avl == _vlmax){
+                    unsigned<32> _vl = _avl;
+                }else if(_avl >= (2*_vlmax)){
+                    unsigned<32> _vl = _vlmax;
+                }else{
+                    unsigned<32> _vl = (_avl % 0x2) ?  _avl/2 + 1 : _avl / 2; // ceil (AVL/2)
+                }
+
+                CSR[VL_ADDR] = _vl;
+                CSR[VTYPE_ADDR] = _illmask | zimm;
+                if(rd != 0) X[rd] = _vl;
+                CSR[VSTART_ADDR] = 0;
+            }
+        }
+
+        VSETVL {
+            encoding: 0b1 :: 0b000000 :: rs2[4:0] :: rs1[4:0] :: 0b111 :: rd[4:0] :: 0b1010111;
+            args_disass:"{name(rd)}, {name(rs1)}, {name(rs2)}";
+            behavior: {
+
+                unsigned<11> zimm[11] = X[rs2];
+                unsigned<3> sew[3]  =  vtype_extractSEW(zimm);
+                unsigned<3> lmul[3] =  vtype_extractLMUL(zimm);
+                unsigned<1> vta[1]  =  vtype_extractTA(zimm);
+                unsigned<1> vma[1]  =  vtype_extractMA(zimm);
+
+                unsigned<XLEN> _vlmax = 0;
+                unsigned<XLEN> _illmask = 0;
+
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                if (lmul & 4){
+                    unsigned<XLEN> _illmask = (1 << (XLEN-1));
+                    if(lmul == 6){
+                        unsigned<XLEN> _vlmax = _vlen / (0x8 << sew) / 4;
+                    }else if(lmul == 7){
+                        unsigned<XLEN> _vlmax = _vlen / (0x8 << sew) / 2;
+                    }else{
+                        unsigned<XLEN> _vlmax = _vlen / (0x8 << sew) / 8;
+                    }
+                }else {
+                    unsigned<XLEN> _illmask = (0 << (XLEN-1));
+                    if(lmul == 0){
+                        unsigned<XLEN> _vlmax = _vlen / (0x8 << sew);
+                    }else if(lmul == 1){
+                        unsigned<XLEN> _vlmax = _vlen / (0x8 << sew) *2;
+                    }else if(lmul == 2){
+                        unsigned<XLEN> _vlmax = _vlen / (0x8 << sew) *4;
+                    }else if(lmul == 3){
+                        unsigned<XLEN> _vlmax = _vlen / (0x8 << sew) *8;
+                    }
+                }
+                unsigned<32> _avl = 0;
+                if (rs1 != 0){
+                    unsigned<XLEN> _avl = X[rs1];
+                }else if(rd != 0){
+                    unsigned<XLEN> _avl = ~0;
+                }else{
+                    unsigned<XLEN> _avl = CSR[VL_ADDR];
+                }
+
+                unsigned<32> _vl = 0;
+
+                if(_avl <= _vlmax){
+                    unsigned<XLEN> _vl = _avl;
+                }else if(_avl >= (2*_vlmax)){
+                    unsigned<XLEN> _vl = _vlmax;
+                }else{
+                    unsigned<XLEN> _vl = (_avl % 0x2) ? _avl/2 +1 : _avl/2; // ceil (AVL/2)
+                }
+
+                CSR[VL_ADDR] = _vl;
+                CSR[VTYPE_ADDR] = _illmask | zimm;
+                if(rd != 0) X[rd] = _vl;
+                CSR[VSTART_ADDR] = 0;
+            }
+
+        }
+
+        VLE_U {
+            encoding: 0b000 :: mew[0:0] :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: width[2:0] :: vd[4:0] :: 0b0000111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _eew = vcfg_concatEEW(mew, width);
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                // unsigned<XLEN> ret = etiss_vload_encoded_unitstride(V, _vtype, vm, _eew, vd, _vstart, _vlen, _vl, X[rs1]); // V, MEM[-1],
+                // if(ret != 0){
+                //     CSR[VSTART_ADDR] = ret >> 8;
+                //     raise(0, 2);
+                // } else{
+                //     CSR[VSTART_ADDR] = 0;
+                // }
+            }
+        }
+
+        VSE_U {
+            encoding: 0b000 :: mew[0:0] :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: width[2:0] :: vs3[4:0] :: 0b0100111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _eew = vcfg_concatEEW(mew, width);
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                // unsigned<XLEN> ret = etiss_vstore_encoded_unitstride(V, _vtype, vm, _eew, vs3, _vstart, _vlen, _vl, X[rs1]); //V, MEM[-1],
+                // if(ret != 0){
+                //     CSR[VSTART_ADDR] = ret >> 8;
+                //     raise(0, 2);
+                // } else{
+                //     CSR[VSTART_ADDR] = 0;
+                // }
+            }
+        }
+
+        VADD_VV {
+            encoding: 0b000000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vadd_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VADD_VI {
+            encoding: 0b000000 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vadd_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VADD_VX {
+            encoding: 0b000000 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vadd_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VSUB_VV {
+            encoding: 0b000010 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vsub_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VSUB_VX {
+            encoding: 0b000010 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+               unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+               unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+               unsigned<XLEN> _vl = CSR[VL_ADDR];
+               unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+               unsigned<XLEN> ret = vsub_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+               if(ret != 0){
+                   CSR[VSTART_ADDR] = ret >> 8;
+                   raise(0, 2);
+               } else{
+                   CSR[VSTART_ADDR] = 0;
+               }
+           }
+        }
+
+        VWADDU_VV {
+            encoding: 0b110000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vwaddu_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VWADDU_VX {
+            encoding: 0b110000 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vwaddu_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VWADD_VV {
+            encoding: 0b110001 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vwadd_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VWADD_VX {
+            encoding: 0b110001 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vwadd_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VWSUBU_VV {
+            encoding: 0b110010 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vwsubu_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VWSUBU_VX {
+            encoding: 0b110010 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vwsubu_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VWSUB_VV {
+            encoding: 0b110011 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vwsub_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VWSUB_VX {
+            encoding: 0b110011 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vwsub_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VWADDU_W_VV {
+            encoding: 0b110100 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vwaddu_w_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VWADDU_W_VX {
+            encoding: 0b110100 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vwaddu_w_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VWADD_W_VV {
+            encoding: 0b110101 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vwadd_w_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VWADD_W_VX {
+            encoding: 0b110101 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vwadd_w_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VWSUBU_W_VV {
+            encoding: 0b110110 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vwsubu_w_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VWSUBU_W_VX {
+            encoding: 0b110110 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vwsubu_w_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VWSUB_W_VV {
+            encoding: 0b110111 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vwsub_w_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VWSUB_W_VX {
+            encoding: 0b110111 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vwsub_w_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VAND_VV {
+            encoding: 0b001001 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vand_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VAND_VI {
+            encoding: 0b001001 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vand_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VAND_VX {
+            encoding: 0b001001 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vand_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VOR_VV {
+            encoding: 0b001010 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vor_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VOR_VI {
+            encoding: 0b001010 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vor_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VOR_VX {
+            encoding: 0b001010 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vor_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VXOR_VV {
+            encoding: 0b001011 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vxor_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VXOR_VI {
+            encoding: 0b001011 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vxor_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VXOR_VX {
+            encoding: 0b001011 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vxor_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VSLL_VV {
+            encoding: 0b100101 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vsll_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VSLL_VI {
+            encoding: 0b100101 :: vm[0:0] :: vs2[4:0] :: uimm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vsll_vi(V, _vtype, vm, vd, vs2, uimm5, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VSLL_VX {
+            encoding: 0b100101 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vsll_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VSRL_VV {
+            encoding: 0b101000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vsrl_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VSRL_VI {
+            encoding: 0b101000 :: vm[0:0] :: vs2[4:0] :: uimm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vsrl_vi(V, _vtype, vm, vd, vs2, uimm5, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VSRL_VX {
+            encoding: 0b101000 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vsrl_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VSRA_VV {
+            encoding: 0b101001 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vsra_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VSRL_VI {
+            encoding: 0b101001 :: vm[0:0] :: vs2[4:0] :: uimm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vsra_vi(V, _vtype, vm, vd, vs2, uimm5, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VSRA_VX {
+            encoding: 0b101001 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vsra_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VMSEQ_VV {
+            encoding: 0b011000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmseq_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VMSEQ_VI {
+            encoding: 0b011001 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmsne_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VMSEQ_VX {
+            encoding: 0b011000 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmseq_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VMSNE_VV {
+            encoding: 0b011001 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmsne_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VMSNE_VI {
+            encoding: 0b011001 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmsne_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VMSNE_VX {
+            encoding: 0b011001 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmsne_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VMSLTU_VV {
+            encoding: 0b011010 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmsltu_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VMSLTU_VX {
+            encoding: 0b011010 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmsltu_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VMSLT_VV {
+            encoding: 0b011011 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmslt_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VMSLT_VX {
+            encoding: 0b011011 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmslt_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VMSLEU_VV {
+            encoding: 0b011100 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmsleu_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VMSLEU_VI {
+            encoding: 0b011100 :: vm[0:0] :: vs2[4:0] :: uimm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(uimm5)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmsleu_vi(V, _vtype, vm, vd, vs2, uimm5, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VMSLEU_VX {
+            encoding: 0b011100 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = ETISS_vmsleu_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VMSLE_VV {
+            encoding: 0b011101 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmsle_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VMSLE_VI {
+            encoding: 0b011101 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmsle_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VMSLE_VX {
+            encoding: 0b011101 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmsle_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+         VMSGTU_VV {
+            encoding: 0b011110 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmsgtu_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VMSGTU_VX {
+            encoding: 0b011110 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmsgtu_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VMSGT_VV {
+            encoding: 0b011111 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmsgt_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VMSGT_VX {
+            encoding: 0b011111 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmsgt_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VMV_V_V {
+          encoding: 0b010111 :: 0b1 :: 0b00000 :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs1)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmv_vv(V, _vtype, vd, vs1, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VMV_V_I {
+            encoding: 0b010111 :: 0b1 :: 0b00000 :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(simm5)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmv_vi(V, _vtype, vd, simm5, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VMV_V_X {
+            encoding: 0b010111 :: 0b1 :: 0b00000 :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(rs1)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmv_vx(V, X, _vtype, vd, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+         VMV_X_S {
+            encoding: 0b010000 :: 0b1 :: vs2[4:0] :: 0b00000 :: 0b100 :: rd[4:0] :: 0b1010111;
+            args_disass:"{name(rd)}, {name(vs2)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                //unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                if(rd != 0){
+                    unsigned<XLEN> ret = vmv_xs(V, X, _vtype, rd, vs2, _vlen, _vl, XLEN);
+                    if(ret != 0){
+                        CSR[VSTART_ADDR] = ret >> 8;
+                        raise(0, 2);
+                    } else{
+                        CSR[VSTART_ADDR] = 0;
+                    }
+                }
+            }
+        }
+
+        VMV_S_X {
+            encoding: 0b010000 :: 0b1 :: 0b00000 :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(rs1)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmv_sx(V, X, _vtype, vd, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        // TODO: vmv.f.s vmv.s.f (requires floating point registers)
+
+        VSLIDEUP_VI {
+            encoding: 0b001110 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vslideup_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VSLIDEUP_VX {
+            encoding: 0b001110 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vslideup_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        // TODO: vfslide1up vrgatherei16
+
+        VSLIDEDOWN_VI {
+            encoding: 0b001111 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vslidedown_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VSLIDEDOWN_VX {
+            encoding: 0b001111 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vslidedown_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VSLIDE1UP_VX {
+            encoding: 0b001110 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vslide1up_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VSLIDE1DOWN_VX {
+            encoding: 0b001111 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vslide1down_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+    }
+}
+
+InsructionSet RV64V extends RV32V{
+
+}
+
