@@ -3,7 +3,7 @@ import "RISCVBase.core_desc"
 
 InstructionSet RV32V extends Zicsr {
     architectural_state {
-        unsigned<32> VLEN;
+        unsigned<32> VLEN = 1024;
         // user-writeable
         unsigned<32> VSTART_ADDR = 0x008;
         unsigned<32>& VSTART_CSR = CSR[VSTART_ADDR];
