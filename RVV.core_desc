@@ -1375,25 +1375,26 @@ InstructionSet RV32V extends RV32I{
             }
         }
 
-         VMSGTU_VV {
-            encoding: 0b011110 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
-            behavior: {
-
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
-
-                unsigned<XLEN> ret = vmsgtu_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
-                if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
-                    raise(0, 2);
-                } else{
-                    CSR[VSTART_ADDR] = 0;
-                }
-            }
-        }
+        // No need to implement pseudoinstructions?
+        // VMSGTU_VV {
+        //    encoding: 0b011110 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+        //    args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+        //    behavior: {
+        //
+        //        unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+        //        unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+        //        unsigned<XLEN> _vl = CSR[VL_ADDR];
+        //        unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+        //
+        //        unsigned<XLEN> ret = vmsgtu_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+        //        if(ret != 0){
+        //            CSR[VSTART_ADDR] = ret >> 8;
+        //            raise(0, 2);
+        //        } else{
+        //            CSR[VSTART_ADDR] = 0;
+        //        }
+        //    }
+        // }
 
         VMSGTU_VX {
             encoding: 0b011110 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
@@ -1415,25 +1416,26 @@ InstructionSet RV32V extends RV32I{
             }
         }
 
-        VMSGT_VV {
-            encoding: 0b011111 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
-            behavior: {
-
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
-
-                unsigned<XLEN> ret = vmsgt_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
-                if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
-                    raise(0, 2);
-                } else{
-                    CSR[VSTART_ADDR] = 0;
-                }
-            }
-        }
+        // No need to implement pseudoinstructions?
+        // VMSGT_VV {
+        //     encoding: 0b011111 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+        //     args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+        //     behavior: {
+        //
+        //         unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+        //         unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+        //         unsigned<XLEN> _vl = CSR[VL_ADDR];
+        //         unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+        //
+        //         unsigned<XLEN> ret = vmsgt_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+        //         if(ret != 0){
+        //             CSR[VSTART_ADDR] = ret >> 8;
+        //             raise(0, 2);
+        //         } else{
+        //             CSR[VSTART_ADDR] = 0;
+        //         }
+        //     }
+        // }
 
         VMSGT_VX {
             encoding: 0b011111 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
