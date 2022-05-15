@@ -34,8 +34,8 @@ InstructionSet RV32V extends Zicsr {
         extern unsigned<8> vtype_extractTA(unsigned<16>);
         extern unsigned<8> vtype_extractMA(unsigned<16>);
         extern unsigned<16> vcfg_concatEEW(unsigned<8> mew, unsigned<8> width);
-        // TODO: etiss_vload_encoded_unitstride?
-        // TODO: etiss_vstore_encoded_unitstride?
+        extern unsigned<8> etiss_vload_encoded_unitstride(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<16> pEEW, unsigned<8> pVd, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<64> pMSTART) [[etiss_needs_arch]];
+        extern unsigned<8> etiss_vstore_encoded_unitstride(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<16> pEEW, unsigned<8> pVd, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<64> pMSTART) [[etiss_needs_arch]];
         extern unsigned<8> vadd_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
         extern unsigned<8> vadd_vi(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pVimm, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
         extern unsigned<8> vadd_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
