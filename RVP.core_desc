@@ -22,6 +22,23 @@ InstructionSet RV32P extends RISCVBase {
                 }
             }
       	}
+      	// This instruction adds the 16-bit integer elements in Rs1 with the 16-bit integer elements in Rs2,
+      	// and then writes the 16-bit element results to Rd.
+      	// Rd.H[x] = Rs1.H[x] + Rs2.H[x];
+      	ADD16 {
+      		  encoding: 0b0100000 :: rs2[4:0] :: rs1[4:0] :: 0b000 :: rd[4:0] :: 0b1110111;
+            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            behavior: {
+                if(rd != 0) {
+            	      unsigned<32> rs1_val = X[rs1];
+            	      unsigned<32> rs2_val = X[rs2];
+                    unsigned<16> rd_val0 = rs1_val[15:0] + rs2_val[15:0];
+                    unsigned<16> rd_val1 = rs1_val[31:16] + rs2_val[31:16];
+            	      unsigned<32> rd_val = rd_val1 :: rd_val0;
+            	      X[rd] = rd_val;
+                }
+            }
+      	}
       	// This instruction subtracts the 8-bit integer elements in Rs2 from the 8-bit integer elements in Rs1,
       	// and then writes the result to Rd.
       	// Rd.B[x] = Rs1.B[x] - Rs2.B[x];
