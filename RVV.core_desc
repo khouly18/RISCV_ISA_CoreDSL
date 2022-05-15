@@ -149,21 +149,21 @@ InstructionSet RV32V extends Zicsr {
                 }
                 unsigned<32> _avl = 0;
                 if (rs1 != 0){
-                    unsigned<32> _avl = X[rs1];
+                    _avl = X[rs1];
                 }else if(rd != 0){
-                    unsigned<32> _avl = ~0;
+                    _avl = ~0;
                 }else{
-                    unsigned<32> _avl = CSR[VL_ADDR];
+                    _avl = CSR[VL_ADDR];
                 }
 
                 unsigned<32> _vl = 0;
 
                 if(_avl == _vlmax){
-                    unsigned<32> _vl = _avl;
+                   _vl = _avl;
                 }else if(_avl >= (2*_vlmax)){
-                    unsigned<32> _vl = _vlmax;
+                   _vl = _vlmax;
                 }else{
-                    unsigned<32> _vl = (_avl % 0x2) ?  _avl/2 + 1 : _avl / 2; // ceil (AVL/2)
+                   _vl = (_avl % 0x2) ?  _avl/2 + 1 : _avl / 2; // ceil (AVL/2)
                 }
 
                 CSR[VL_ADDR] = _vl;
@@ -212,21 +212,21 @@ InstructionSet RV32V extends Zicsr {
                 }
                 unsigned<32> _avl = 0;
                 if (rs1 != 0){
-                    unsigned<XLEN> _avl = X[rs1];
+                    _avl = X[rs1];
                 }else if(rd != 0){
-                    unsigned<XLEN> _avl = ~0;
+                    _avl = ~0;
                 }else{
-                    unsigned<XLEN> _avl = CSR[VL_ADDR];
+                    _avl = CSR[VL_ADDR];
                 }
 
                 unsigned<32> _vl = 0;
 
                 if(_avl <= _vlmax){
-                    unsigned<XLEN> _vl = _avl;
+                   _vl = _avl;
                 }else if(_avl >= (2*_vlmax)){
-                    unsigned<XLEN> _vl = _vlmax;
+                   _vl = _vlmax;
                 }else{
-                    unsigned<XLEN> _vl = (_avl % 0x2) ? _avl/2 +1 : _avl/2; // ceil (AVL/2)
+                   _vl = (_avl % 0x2) ? _avl/2 +1 : _avl/2; // ceil (AVL/2)
                 }
 
                 CSR[VL_ADDR] = _vl;
