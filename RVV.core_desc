@@ -380,7 +380,7 @@ InstructionSet RV32V extends Zicsr {
         }
 
         VWADDU_VV {
-            encoding: 0b110000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            encoding: 0b110000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b010 :: vd[4:0] :: 0b1010111;
             args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
@@ -420,7 +420,7 @@ InstructionSet RV32V extends Zicsr {
         }
 
         VWADD_VV {
-            encoding: 0b110001 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            encoding: 0b110001 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b010 :: vd[4:0] :: 0b1010111;
             args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
@@ -500,7 +500,7 @@ InstructionSet RV32V extends Zicsr {
         }
 
         VWSUB_VV {
-            encoding: 0b110011 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            encoding: 0b110011 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b010 :: vd[4:0] :: 0b1010111;
             args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
