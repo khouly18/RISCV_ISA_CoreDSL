@@ -112,6 +112,9 @@ InstructionSet RV32V extends Zicsr {
             encoding: 0b0 :: zimm[10:0] :: rs1[4:0] :: 0b111 :: rd[4:0] :: 0b1010111;
             args_disass:"{name(rd)}, {name(rs1)}, {zimm}";
             behavior: {
+                if(!(CSR[0x300] & MSTATUS_VS)){
+                    raise(0, 2);  // vpu not enabled
+                }
 
                 unsigned<3> sew[3]  = vtype_extractSEW(zimm);
                 unsigned<3> lmul[3] = vtype_extractLMUL(zimm);
