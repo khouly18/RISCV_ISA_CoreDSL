@@ -175,5 +175,56 @@ InstructionSet RV32P extends RISCVBase {
                 }
             }
       	}
+        // TODO
+        // Mresult = ZE33(Rs1) u* ZE33(Rs2);
+        // R[Rd(4,1).1(0)][31:0] = Mresult[63:32];
+        // R[Rd(4,1).0(0)][31:0] = Mresult[31:0];
+      	MULR64 {
+        		encoding: 0b1111000 :: rs2[4:0] :: rs1[4:0] :: 0b001 :: rd[4:0] :: 0b1110111;
+            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            behavior: {
+             	  unsigned<32> rs1_val = X[rs1];
+             	  unsigned<32> rs2_val = X[rs2];
+            	  unsigned<64> product = rs1_val * rs2_val;
+              	X[rd[4:1]*2+1] = product[63:32];
+              	X[rd[4:1]*2] = product[31:0];
+            }
+      	}
+        // TODO
+      	ADD64 {
+        		encoding: 0b1100000 :: rs2[4:0] :: rs1[4:0] :: 0b001 :: rd[4:0] :: 0b1110111;
+            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            behavior: {
+             	  signed<64> rs1_val = X[rs1[4:1]*2+1] :: X[rs1[4:1]*2];
+             	  signed<64> rs2_val = X[rs2[4:1]*2+1] :: X[rs2[4:1]*2];
+            	  signed<64> sum = rs1_val + rs2_val;
+              	X[rd[4:1]*2+1] = sum[63:32];
+              	X[rd[4:1]*2] = sum[31:0];
+            }
+      	}
+      	MIN {
+      	  	encoding: 0b0000101 :: rs2[4:0] :: rs1[4:0] :: 0b100 :: rd[4:0] :: 0b0110011;
+            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            behavior: {
+                if(rd != 0) {
+            	      signed<32> rs1_val = X[rs1];
+            	      signed<32> rs2_val = X[rs2];
+                    signed<32> rd_val = rs1_val < rs2_val ? rs1_val : rs2_val;
+            	      X[rd] = rd_val;
+                }
+            }
+      	}
+      	MAX {
+      	  	encoding: 0b0000101 :: rs2[4:0] :: rs1[4:0] :: 0b110 :: rd[4:0] :: 0b0110011;
+            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            behavior: {
+                if(rd != 0) {
+            	      signed<32> rs1_val = X[rs1];
+            	      signed<32> rs2_val = X[rs2];
+                    signed<32> rd_val = rs1_val >= rs2_val ? rs1_val : rs2_val;
+            	      X[rd] = rd_val;
+                }
+            }
+      	}
 	  }
 }
