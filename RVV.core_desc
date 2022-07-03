@@ -127,24 +127,24 @@ InstructionSet RV32V extends Zicsr {
                 unsigned<32> vlen = CSR[VLENB_ADDR]*8;
 
                 if (lmul & 4){
-                    unsigned<32> _illmask = (1 << (XLEN-1));
+                    _illmask = (1 << (XLEN-1));
                     if(lmul == 6){
-                        unsigned<32> _vlmax = vlen / (0x8 << sew) / 4;
+                        _vlmax = vlen / (0x8 << sew) / 4;
                     }else if(lmul == 7){
-                        unsigned<32> _vlmax = vlen / (0x8 << sew) / 2;
+                        _vlmax = vlen / (0x8 << sew) / 2;
                     }else{
-                        unsigned<32> _vlmax = vlen / (0x8 << sew) / 8;
+                        _vlmax = vlen / (0x8 << sew) / 8;
                     }
                 }else {
-                    unsigned<32> _illmask = (0 << (XLEN-1));
+                    _illmask = (0 << (XLEN-1));
                     if(lmul == 0){
-                        unsigned<32> _vlmax = vlen / (0x8 << sew);
+                        _vlmax = vlen / (0x8 << sew);
                     }else if(lmul == 1){
-                        unsigned<32> _vlmax = vlen / (0x8 << sew) *2;
+                        _vlmax = vlen / (0x8 << sew) *2;
                     }else if(lmul == 2){
-                        unsigned<32> _vlmax = vlen / (0x8 << sew) *4;
+                        _vlmax = vlen / (0x8 << sew) *4;
                     }else if(lmul == 3){
-                        unsigned<32> _vlmax = vlen / (0x8 << sew) *8;
+                        _vlmax = vlen / (0x8 << sew) *8;
                     }
                 }
                 unsigned<32> _avl = 0;
@@ -158,7 +158,7 @@ InstructionSet RV32V extends Zicsr {
 
                 unsigned<32> _vl = 0;
 
-                if(_avl == _vlmax){
+                if(_avl <= _vlmax){
                    _vl = _avl;
                 }else if(_avl >= (2*_vlmax)){
                    _vl = _vlmax;
@@ -190,24 +190,24 @@ InstructionSet RV32V extends Zicsr {
                 unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
 
                 if (lmul & 4){
-                    unsigned<XLEN> _illmask = (1 << (XLEN-1));
+                    _illmask = (1 << (XLEN-1));
                     if(lmul == 6){
-                        unsigned<XLEN> _vlmax = _vlen / (0x8 << sew) / 4;
+                        _vlmax = _vlen / (0x8 << sew) / 4;
                     }else if(lmul == 7){
-                        unsigned<XLEN> _vlmax = _vlen / (0x8 << sew) / 2;
+                        _vlmax = _vlen / (0x8 << sew) / 2;
                     }else{
-                        unsigned<XLEN> _vlmax = _vlen / (0x8 << sew) / 8;
+                        _vlmax = _vlen / (0x8 << sew) / 8;
                     }
                 }else {
-                    unsigned<XLEN> _illmask = (0 << (XLEN-1));
+                    _illmask = (0 << (XLEN-1));
                     if(lmul == 0){
-                        unsigned<XLEN> _vlmax = _vlen / (0x8 << sew);
+                        _vlmax = _vlen / (0x8 << sew);
                     }else if(lmul == 1){
-                        unsigned<XLEN> _vlmax = _vlen / (0x8 << sew) *2;
+                        _vlmax = _vlen / (0x8 << sew) *2;
                     }else if(lmul == 2){
-                        unsigned<XLEN> _vlmax = _vlen / (0x8 << sew) *4;
+                        _vlmax = _vlen / (0x8 << sew) *4;
                     }else if(lmul == 3){
-                        unsigned<XLEN> _vlmax = _vlen / (0x8 << sew) *8;
+                        _vlmax = _vlen / (0x8 << sew) *8;
                     }
                 }
                 unsigned<32> _avl = 0;
@@ -248,7 +248,7 @@ InstructionSet RV32V extends Zicsr {
                 unsigned<XLEN> _vl = CSR[VL_ADDR];
                 unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
 
-                unsigned<XLEN> ret = etiss_vload_encoded_unitstride(V, _vtype, vm, _eew, vd, _vstart, _vlen, _vl, X[rs1]); // V, MEM[-1],
+                unsigned<XLEN> ret = etiss_vload_encoded_unitstride(V, _vtype, vm, _eew, vd, _vstart, _vlen, _vl, (unsigned<64>)X[rs1]); // V, MEM[-1],
                 if(ret != 0){
                     CSR[VSTART_ADDR] = ret >> 8;
                     raise(0, 2);
@@ -269,7 +269,7 @@ InstructionSet RV32V extends Zicsr {
                 unsigned<XLEN> _vl = CSR[VL_ADDR];
                 unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
 
-                unsigned<XLEN> ret = etiss_vstore_encoded_unitstride(V, _vtype, vm, _eew, vs3, _vstart, _vlen, _vl, X[rs1]); //V, MEM[-1],
+                unsigned<XLEN> ret = etiss_vstore_encoded_unitstride(V, _vtype, vm, _eew, vs3, _vstart, _vlen, _vl, (unsigned<64>)X[rs1]); //V, MEM[-1],
                 if(ret != 0){
                     CSR[VSTART_ADDR] = ret >> 8;
                     raise(0, 2);
