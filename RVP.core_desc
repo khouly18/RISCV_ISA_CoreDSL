@@ -202,6 +202,17 @@ InstructionSet RV32P extends RISCVBase {
                 X[rd[4:1]*2] = sum[31:0];
             }
         }
+        SUB64 {
+            encoding: 0b1100001 :: rs2[4:0] :: rs1[4:0] :: 0b001 :: rd[4:0] :: 0b1110111;
+            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            behavior: {
+                signed<64> rs1_val = X[rs1[4:1]*2+1] :: X[rs1[4:1]*2];
+                signed<64> rs2_val = X[rs2[4:1]*2+1] :: X[rs2[4:1]*2];
+                signed<64> sum = rs1_val - rs2_val;
+                X[rd[4:1]*2+1] = sum[63:32];
+                X[rd[4:1]*2] = sum[31:0];
+            }
+        }
         MIN {
             encoding: 0b0000101 :: rs2[4:0] :: rs1[4:0] :: 0b100 :: rd[4:0] :: 0b0110011;
             args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
