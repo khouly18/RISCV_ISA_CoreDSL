@@ -4,7 +4,6 @@ import "RISCVBase.core_desc"
 InstructionSet RV32V extends Zicsr {
     architectural_state {
         unsigned<32> VLEN = 1024;
-        unsigned<32> MSTATUS_VS = 0x00000600;  // from encoding.h
         // user-writeable
         unsigned<32> VSTART_ADDR = 0x008;
         unsigned<32>& VSTART_CSR = CSR[VSTART_ADDR];
@@ -112,7 +111,7 @@ InstructionSet RV32V extends Zicsr {
             encoding: 0b0 :: zimm[10:0] :: rs1[4:0] :: 0b111 :: rd[4:0] :: 0b1010111;
             args_disass:"{name(rd)}, {name(rs1)}, {zimm}";
             behavior: {
-                if(!(CSR[0x300] & MSTATUS_VS)){
+                if(!(CSR[CSR_MSTATUS] & MSTATUS_VS)){
                     raise(0, 2);  // vpu not enabled
                 }
 
