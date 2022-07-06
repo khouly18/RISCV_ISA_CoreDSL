@@ -235,14 +235,98 @@ InstructionSet RV32V extends Zicsr {
             }
 
         }
+        // This conflicts with the FLW/FSW encoding of the RV32F instruction set
+        // VLE_U {
+        //     encoding: 0b000 :: mew[0:0] :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: width[2:0] :: vd[4:0] :: 0b0000111;
+        //     args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+        //     behavior: {
 
-        VLE_U {
-            encoding: 0b000 :: mew[0:0] :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: width[2:0] :: vd[4:0] :: 0b0000111;
+        //         unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+        //         unsigned<XLEN> _eew = vcfg_concatEEW(mew, width);
+        //         unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+        //         unsigned<XLEN> _vl = CSR[VL_ADDR];
+        //         unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+        //         unsigned<XLEN> ret = etiss_vload_encoded_unitstride(V, _vtype, vm, _eew, vd, _vstart, _vlen, _vl, (unsigned<64>)X[rs1]); // V, MEM[-1],
+        //         if(ret != 0){
+        //             CSR[VSTART_ADDR] = ret >> 8;
+        //             raise(0, 2);
+        //         } else{
+        //             CSR[VSTART_ADDR] = 0;
+        //         }
+        //     }
+        // }
+        // Unitstride, 8 bit element
+        VLE8_U {
+            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b000 :: vd[4:0] :: 0b0000111;
             args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _eew = vcfg_concatEEW(mew, width);
+                unsigned<XLEN> _eew = vcfg_concatEEW(0b0, 0b000);
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = etiss_vload_encoded_unitstride(V, _vtype, vm, _eew, vd, _vstart, _vlen, _vl, (unsigned<64>)X[rs1]); // V, MEM[-1],
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+        // Unitstride, 16 bit element
+        VLE16_U {
+            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b101 :: vd[4:0] :: 0b0000111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _eew = vcfg_concatEEW(0b0, 0b101);
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = etiss_vload_encoded_unitstride(V, _vtype, vm, _eew, vd, _vstart, _vlen, _vl, (unsigned<64>)X[rs1]); // V, MEM[-1],
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+        // Unitstride, 32 bit element
+        VLE32_U {
+            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b0000111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _eew = vcfg_concatEEW(0b0, 0b110);
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = etiss_vload_encoded_unitstride(V, _vtype, vm, _eew, vd, _vstart, _vlen, _vl, (unsigned<64>)X[rs1]); // V, MEM[-1],
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+        // Unitstride, 64 bit element
+        VLE64_U {
+            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b111 :: vd[4:0] :: 0b0000111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _eew = vcfg_concatEEW(0b0, 0b111);
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
                 unsigned<XLEN> _vl = CSR[VL_ADDR];
                 unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
@@ -257,13 +341,35 @@ InstructionSet RV32V extends Zicsr {
             }
         }
 
-        VSE_U {
-            encoding: 0b000 :: mew[0:0] :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: width[2:0] :: vs3[4:0] :: 0b0100111;
+        // This conflicts with the FLW/FSW encoding of the RV32F instruction set
+        // VSE_U {
+        //     encoding: 0b000 :: mew[0:0] :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: width[2:0] :: vs3[4:0] :: 0b0100111;
+        //     args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+        //     behavior: {
+
+        //         unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+        //         unsigned<XLEN> _eew = vcfg_concatEEW(mew, width);
+        //         unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+        //         unsigned<XLEN> _vl = CSR[VL_ADDR];
+        //         unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+        //         unsigned<XLEN> ret = etiss_vstore_encoded_unitstride(V, _vtype, vm, _eew, vs3, _vstart, _vlen, _vl, (unsigned<64>)X[rs1]); //V, MEM[-1],
+        //         if(ret != 0){
+        //             CSR[VSTART_ADDR] = ret >> 8;
+        //             raise(0, 2);
+        //         } else{
+        //             CSR[VSTART_ADDR] = 0;
+        //         }
+        //     }
+        // }
+        // Unitstride, 8 bit element
+        VSE8_U {
+            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b000 :: vs3[4:0] :: 0b0100111;
             args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _eew = vcfg_concatEEW(mew, width);
+                unsigned<XLEN> _eew = vcfg_concatEEW(0b0, 0b000);
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
                 unsigned<XLEN> _vl = CSR[VL_ADDR];
                 unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
@@ -277,7 +383,69 @@ InstructionSet RV32V extends Zicsr {
                 }
             }
         }
+        // Unitstride, 16 bit element
+        VSE16_U {
+            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b101 :: vs3[4:0] :: 0b0100111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
 
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _eew = vcfg_concatEEW(0b0, 0b101);
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = etiss_vstore_encoded_unitstride(V, _vtype, vm, _eew, vs3, _vstart, _vlen, _vl, (unsigned<64>)X[rs1]); //V, MEM[-1],
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+        // Unitstride, 32 bit element
+        VSE32_U {
+            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b110 :: vs3[4:0] :: 0b0100111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _eew = vcfg_concatEEW(0b0, 0b110);
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = etiss_vstore_encoded_unitstride(V, _vtype, vm, _eew, vs3, _vstart, _vlen, _vl, (unsigned<64>)X[rs1]); //V, MEM[-1],
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+        // Unitstride, 64 bit element
+        VSE64_U {
+            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b111 :: vs3[4:0] :: 0b0100111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _eew = vcfg_concatEEW(0b0, 0b111);
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = etiss_vstore_encoded_unitstride(V, _vtype, vm, _eew, vs3, _vstart, _vlen, _vl, (unsigned<64>)X[rs1]); //V, MEM[-1],
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
         VADD_VV {
             encoding: 0b000000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
             args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
