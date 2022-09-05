@@ -101,8 +101,8 @@ InstructionSet RV32Zpn extends RV32I {
             args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
             behavior: {
                 if(rd != 0) {
-                    signed<32> rs1_val = X[rs1];
-                    signed<32> rs2_val = X[rs2];
+                    unsigned<32> rs1_val = X[rs1];
+                    unsigned<32> rs2_val = X[rs2];
                     signed<32> rd_val = X[rd];
                     signed<16> rs1_val_lo = rs1_val[15:0];
                     signed<16> rs1_val_hi = rs1_val[31:16];
@@ -110,10 +110,14 @@ InstructionSet RV32Zpn extends RV32I {
                     signed<16> rs2_val_hi = rs2_val[31:16];
                     signed<32> mula32 = rs1_val_hi * rs2_val_hi;
                     signed<32> mulb32 = rs1_val_lo * rs2_val_lo;
-                    signed<34> res34 = (signed<34>)rd_val + (signed<34>)mula32 + (signed<34>)mulb32;
-                    if (res34 >= (1 << 32)) {
+                    // signed<34> res34 = (signed<34>)rd_val + (signed<34>)mula32 + (signed<34>)mulb32;  // does not work on etiss
+                    signed<64> res34 = (signed<64>)rd_val + (signed<64>)mula32 + (signed<64>)mulb32;
+                    if (res34 >= (signed<64>)(1 << 32)) {  // broken?
+                    // if (res34 >= (signed<64>)0 && res34 >= (1 << 32)) {
                         res34 = (1 << 32) - 1;
                         VXSAT_CSR__ = VXSAT_CSR__ | 0b1;  // set OV bit
+                    // } else if (res34 < -(1 << 32)) {  // broken?
+                    // } else if (res34 < 0 && (unsigned<64>)(-res34) > (1 << 32)) {
                     } else if (res34 < -(1 << 32)) {
                         res34 = -(1 << 32);
                         VXSAT_CSR = VXSAT_CSR__ | 0b1;  // set OV bit
@@ -141,8 +145,8 @@ InstructionSet RV32Zpn extends RV32I {
             args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
             behavior: {
                 if(rd != 0) {
-                    signed<32> rs1_val = X[rs1];
-                    signed<32> rs2_val = X[rs2];
+                    unsigned<32> rs1_val = X[rs1];
+                    unsigned<32> rs2_val = X[rs2];
                     signed<32> rd_val = X[rd];
                     signed<16> rs1_val_lo = rs1_val[15:0];
                     signed<16> rs1_val_hi = rs1_val[31:16];
@@ -150,8 +154,9 @@ InstructionSet RV32Zpn extends RV32I {
                     signed<16> rs2_val_hi = rs2_val[31:16];
                     signed<32> mula32 = rs1_val_hi * rs2_val_lo;
                     signed<32> mulb32 = rs1_val_lo * rs2_val_hi;
-                    signed<34> res34 = (signed<34>)rd_val + (signed<34>)mula32 + (signed<34>)mulb32;
-                    if (res34 >= (1 << 32)) {
+                    // signed<34> res34 = (signed<34>)rd_val + (signed<34>)mula32 + (signed<34>)mulb32; // does not work on etiss
+                    signed<64> res34 = (signed<64>)rd_val + (signed<64>)mula32 + (signed<64>)mulb32;
+                    if (res34 >= (signed<64>)(1 << 32)) {
                         res34 = (1 << 32) - 1;
                         VXSAT_CSR__ = VXSAT_CSR__ | 0b1;  // set OV bit
                     } else if (res34 < -(1 << 32)) {
@@ -430,25 +435,25 @@ InstructionSet RV32Zpn extends RV32I {
                 if(rd != 0) {
                     unsigned<32> rs1_val = X[rs1];
                     // TODO: move to helper function
-                    if(code & 0b01000) {  // SUNPKD810
+                    if(code == 0b01000) {  // SUNPKD810
                         signed<8> rs1_val_hi = rs1_val[15:8];
                         signed<8> rs1_val_lo = rs1_val[7:0];
-                    } else if (code & 0b01001) {  // SUNPKD820
+                    } else if (code == 0b01001) {  // SUNPKD820
                         signed<8> rs1_val_hi = rs1_val[23:16];
                         signed<8> rs1_val_lo = rs1_val[7:0];
-                    } else if (code & 0b01010) {  // SUNPKD830
+                    } else if (code == 0b01010) {  // SUNPKD830
                         signed<8> rs1_val_hi = rs1_val[31:24];
                         signed<8> rs1_val_lo = rs1_val[7:0];
-                    } else if (code & 0b01011) {  // SUNPKD831
+                    } else if (code == 0b01011) {  // SUNPKD831
                         signed<8> rs1_val_hi = rs1_val[31:24];
                         signed<8> rs1_val_lo = rs1_val[15:8];
-                    } else if (code & 0b10011) {  // SUNPKD832
+                    } else if (code == 0b10011) {  // SUNPKD832
                         signed<8> rs1_val_hi = rs1_val[31:24];
                         signed<8> rs1_val_lo = rs1_val[23:16];
                     } else {
                         raise(0, 2);  // Invalid instruction?
                     }
-                    X[rd] = (signed<16>)rs1_val_hi :: (signed<16>)rs1_val_lo;
+                    X[rd] = (signed<16>)rs1_val_hi :: (unsigned<16>)(signed<16>)rs1_val_lo;
                 }
             }
         }
@@ -653,13 +658,33 @@ InstructionSet Zbpo extends RISCVBase {  // extends Zpn?
     }
 }
 
-// InstructionSet RV32Zbpo extends Zbpo {
-//     instructions {
-//         // CLZ
-//         // FSR
-//         // FSRI
-//     }
-// }
+InstructionSet RV32Zbpo extends Zbpo {
+    instructions {
+        // TODO (MAX)
+        CLZ {
+            encoding: 0b0110000 :: 0b00000 :: rs1[4:0] :: 0b001 :: rd[4:0] :: 0b0010011;
+            args_disass:"{name(rd)}, {name(rs1)}";
+            behavior: {
+                if(rd != 0) {
+                    unsigned<32> rs1_val = X[rs1];
+                    unsigned<32> count = 0;
+                    unsigned int i = 32;
+                    while (i > 0) {
+                        i = i - 1;
+                        if (rs1_val[i] == 0b0) {
+                            count = count + 1;
+                        } else {
+                            i = 0;  // TODO: break;
+                        }
+                    }
+                    X[rd] = count;
+                }
+            }
+        }
+        // FSR
+        // FSRI
+    }
+}
 
 // InstructionSet RV64Zbpo extends Zbpo {
 //     instructions {
@@ -783,8 +808,7 @@ InstructionSet RV32Zpsfoperand extends Zpsfoperand {
 // }
 
 
-// InstructionSet RV32P extends RV32Zpn, RV32Zbpo, RV32Zpsfoperand {
-InstructionSet RV32P extends RV32Zpn, Zbpo, RV32Zpsfoperand {
+InstructionSet RV32P extends RV32Zpn, RV32Zbpo, RV32Zpsfoperand {
     architectural_state {
         unsigned<32> VXSAT_ADDR_ = 0x009;
         unsigned<32>& VXSAT_CSR_ = CSR[VXSAT_ADDR_];
