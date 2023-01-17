@@ -1885,6 +1885,13 @@ InstructionSet RV32V extends Zicsr {
             }
         }
 
+         VZEXT {
+            encoding: 0b010010 :: 0b1 :: vs2[4:0] :: vs1[4:0] :: 0b010 :: rd[4:0] :: 0b1010111;
+            args_disass:"{name(rd)}, {name(vs2)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
         // TODO: vmv.f.s vmv.s.f (requires floating point registers)
 
         VSLIDEUP_VI {
