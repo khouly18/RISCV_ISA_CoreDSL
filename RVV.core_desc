@@ -716,7 +716,7 @@ InstructionSet RV32V extends Zicsr {
         }
 
         VWADD_VX {
-            encoding: 0b110001 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 0b110001 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b1010111;
             args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
