@@ -1844,7 +1844,7 @@ InstructionSet RV32V extends Zicsr {
         }
 
          VMV_X_S {
-            encoding: 0b010000 :: 0b1 :: vs2[4:0] :: 0b00000 :: 0b100 :: rd[4:0] :: 0b1010111;
+            encoding: 0b010000 :: 0b1 :: vs2[4:0] :: 0b00000 :: 0b010 :: rd[4:0] :: 0b1010111;
             args_disass:"{name(rd)}, {name(vs2)}";
             behavior: {
 
@@ -1866,7 +1866,7 @@ InstructionSet RV32V extends Zicsr {
         }
 
         VMV_S_X {
-            encoding: 0b010000 :: 0b1 :: 0b00000 :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 0b010000 :: 0b1 :: 0b00000 :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b1010111;
             args_disass:"{name(vd)}, {name(rs1)}";
             behavior: {
 
