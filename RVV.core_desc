@@ -355,6 +355,13 @@ InstructionSet RV32V extends Zicsr {
             }
         }
 
+        VLR_V {
+            encoding: nf[2:0] :: 0b0 :: 0b00 :: 0b1 :: 0b01000 :: rs1[4:0] :: 0b000 :: vd[4:0] :: 0b0000111;
+            args_disass:"{name(vs3)}, ({name(rs1)})";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
 
         // This conflicts with the FLW/FSW encoding of the RV32F instruction set
         // VSE_U {
