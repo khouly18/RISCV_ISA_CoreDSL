@@ -362,6 +362,34 @@ InstructionSet RV32V extends Zicsr {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
+        VLSEGE8 {
+            encoding: nf[2:0] :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b000 :: vd[4:0] :: 0b0000111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLSEGE16 {
+            encoding: nf[2:0] :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b101 :: vd[4:0] :: 0b0000111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLSEGE32 {
+            encoding: nf[2:0] :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b0000111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLSEGE64 {
+            encoding: nf[2:0] :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b111 :: vd[4:0] :: 0b0000111;
+            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
 
         // This conflicts with the FLW/FSW encoding of the RV32F instruction set
         // VSE_U {
