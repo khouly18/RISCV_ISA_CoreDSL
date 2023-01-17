@@ -2029,6 +2029,13 @@ InstructionSet RV32V extends Zicsr {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
+        VFMV_V_F {
+          encoding: 0b010111 :: 0b1 :: 0b00000 :: rs1[4:0] :: 0b101 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs1)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
 
     }
 }
