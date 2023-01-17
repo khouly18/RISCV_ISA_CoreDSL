@@ -1734,6 +1734,13 @@ InstructionSet RV32V extends Zicsr {
                 }
             }
         }
+        VMSGTU_VI {
+            encoding: 0b011110 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            args_disass:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
 
         // No need to implement pseudoinstructions?
         // VMSGT_VV {
