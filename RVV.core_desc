@@ -172,6 +172,13 @@ InstructionSet RV32V extends Zicsr {
             }
         }
 
+        VSETIVLI {
+            encoding: 0b0 :: 0b0 :: zimm[9:0] :: uimm[4:0] :: 0b111 :: rd[4:0] :: 0b1010111;
+            args_disass:"{name(rd)}, {name(rs1)}, {zimm}";
+            behavior: {
+                unsigned<32> _vlmax = 0;
+            }
+        }
         VSETVL {
             encoding: 0b1 :: 0b000000 :: rs2[4:0] :: rs1[4:0] :: 0b111 :: rd[4:0] :: 0b1010111;
             args_disass:"{name(rd)}, {name(rs1)}, {name(rs2)}";
