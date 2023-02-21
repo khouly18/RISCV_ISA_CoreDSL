@@ -11,7 +11,7 @@ InstructionSet RV32Zpn extends RV32I {
         // Rd.B[x] = Rs1.B[x] + Rs2.B[x];
         ADD8 {
             encoding: 0b0100100 :: rs2[4:0] :: rs1[4:0] :: 0b000 :: rd[4:0] :: 0b1110111;
-            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            assembly:"{name(rs2)}, {name(rs1)}, {name(rd)}";
             behavior: {
                 if(rd != 0) {
                     unsigned<32> rs1_val = X[rs1];
@@ -30,7 +30,7 @@ InstructionSet RV32Zpn extends RV32I {
         // Rd.H[x] = Rs1.H[x] + Rs2.H[x];
         ADD16 {
             encoding: 0b0100000 :: rs2[4:0] :: rs1[4:0] :: 0b000 :: rd[4:0] :: 0b1110111;
-            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            assembly:"{name(rs2)}, {name(rs1)}, {name(rd)}";
             behavior: {
                 if(rd != 0) {
                     unsigned<32> rs1_val = X[rs1];
@@ -98,7 +98,7 @@ InstructionSet RV32Zpn extends RV32I {
         // for RV64: x=1..0
         KMADA {
             encoding: 0b0100100 :: rs2[4:0] :: rs1[4:0] :: 0b001 :: rd[4:0] :: 0b1110111;
-            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            assembly:"{name(rs2)}, {name(rs1)}, {name(rd)}";
             behavior: {
                 if(rd != 0) {
                     unsigned<32> rs1_val = X[rs1];
@@ -142,7 +142,7 @@ InstructionSet RV32Zpn extends RV32I {
         // for RV64: x=1..0
         KMAXDA {
             encoding: 0b0100101 :: rs2[4:0] :: rs1[4:0] :: 0b001 :: rd[4:0] :: 0b1110111;
-            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            assembly:"{name(rs2)}, {name(rs1)}, {name(rd)}";
             behavior: {
                 if(rd != 0) {
                     unsigned<32> rs1_val = X[rs1];
@@ -216,7 +216,7 @@ InstructionSet RV32Zpn extends RV32I {
         // Rd = Rd + Mresult.W[0];  // overflow ignored
         MADDR32 {
             encoding: 0b1100010 :: rs2[4:0] :: rs1[4:0] :: 0b001 :: rd[4:0] :: 0b1110111;
-            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            assembly:"{name(rs2)}, {name(rs1)}, {name(rd)}";
             behavior: {
                 if(rd != 0) {
                     signed<32> rs1_val = X[rs1];
@@ -256,7 +256,7 @@ InstructionSet RV32Zpn extends RV32I {
         // Rd.B[x] = (Rs1.B[x] <= Rs2.B[x]) ? 0xff : 0x0;
         SCMPLE8 {
             encoding: 0b0001111 :: rs2[4:0] :: rs1[4:0] :: 0b000 :: rd[4:0] :: 0b1110111;
-            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            assembly:"{name(rs2)}, {name(rs1)}, {name(rd)}";
             behavior: {
                 if(rd != 0) {
                     unsigned<32> rs1_val = X[rs1];
@@ -278,7 +278,7 @@ InstructionSet RV32Zpn extends RV32I {
         // Rd.B[x] = Rs1.B[x] << Rs2[2:0];
         SLL8 {
             encoding: 0b0101110 :: rs2[4:0] :: rs1[4:0] :: 0b000 :: rd[4:0] :: 0b1110111;
-            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            assembly:"{name(rs2)}, {name(rs1)}, {name(rd)}";
             behavior: {
                 if(rd != 0) {
                     unsigned<32> rs1_val = X[rs1];
@@ -304,7 +304,7 @@ InstructionSet RV32Zpn extends RV32I {
         // Rd.W[x] = res[x];
         SMAQA {
             encoding: 0b1100100 :: rs2[4:0] :: rs1[4:0] :: 0b000 :: rd[4:0] :: 0b1110111;
-            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            assembly:"{name(rs2)}, {name(rs1)}, {name(rd)}";
             behavior: {
                 if(rd != 0) {
                     unsigned<32> rs1_val = X[rs1];
@@ -325,7 +325,7 @@ InstructionSet RV32Zpn extends RV32I {
         // Rd.B[x] = (Rs1.B[x] > Rs2.B[x]) ? Rs1.B[x] : Rs2.B[x];
         SMAX8 {
             encoding: 0b1000101 :: rs2[4:0] :: rs1[4:0] :: 0b000 :: rd[4:0] :: 0b1110111;
-            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            assembly:"{name(rs2)}, {name(rs1)}, {name(rd)}";
             behavior: {
                 if(rd != 0) {
                     unsigned<32> rs1_val = X[rs1];
@@ -344,7 +344,7 @@ InstructionSet RV32Zpn extends RV32I {
         // Rd.H[x] = (Rs1.H[x] > Rs2.H[x]) ? Rs1.H[x] : Rs2.H[x];
         SMAX16 {
             encoding: 0b1000001 :: rs2[4:0] :: rs1[4:0] :: 0b000 :: rd[4:0] :: 0b1110111;
-            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            assembly:"{name(rs2)}, {name(rs1)}, {name(rd)}";
             behavior: {
                 if(rd != 0) {
                     unsigned<32> rs1_val = X[rs1];
@@ -367,7 +367,7 @@ InstructionSet RV32Zpn extends RV32I {
         // Rd.B[x] = (Rs1.B[x] < Rs2.B[x]) ? Rs1.B[x] : Rs2.B[x];
         SMIN8 {
             encoding: 0b1000100 :: rs2[4:0] :: rs1[4:0] :: 0b000 :: rd[4:0] :: 0b1110111;
-            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            assembly:"{name(rs2)}, {name(rs1)}, {name(rd)}";
             behavior: {
                 if(rd != 0) {
                     unsigned<32> rs1_val = X[rs1];
@@ -413,7 +413,7 @@ InstructionSet RV32Zpn extends RV32I {
         // Rd.B[x] = Rs1.B[x] - Rs2.B[x];
         SUB8 {
             encoding: 0b0100101 :: rs2[4:0] :: rs1[4:0] :: 0b000 :: rd[4:0] :: 0b1110111;
-            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            assembly:"{name(rs2)}, {name(rs1)}, {name(rd)}";
             behavior: {
                 if(rd != 0) {
                     unsigned<32> rs1_val = X[rs1];
@@ -430,7 +430,7 @@ InstructionSet RV32Zpn extends RV32I {
         // TODO (SUNPKD8xy)
         SUNPKD8 {
             encoding: 0b1010110 :: code[4:0] :: rs1[4:0] :: 0b000 :: rd[4:0] :: 0b1110111;
-            args_disass:"{name(rs1)}, {name(rd)}";
+            assembly:"{name(rs1)}, {name(rd)}";
             behavior: {
                 if(rd != 0) {
                     unsigned<32> rs1_val = X[rs1];
@@ -600,7 +600,7 @@ InstructionSet Zbpo extends RISCVBase {  // extends Zpn?
         // TODO
         PACK {
             encoding: 0b0000100 :: rs2[4:0] :: rs1[4:0] :: 0b100 :: rd[4:0] :: 0b0110011;
-            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            assembly:"{name(rs2)}, {name(rs1)}, {name(rd)}";
             behavior: {
                 if(rd != 0) {
                     unsigned<XLEN> rs1_val = X[rs1];
@@ -615,7 +615,7 @@ InstructionSet Zbpo extends RISCVBase {  // extends Zpn?
         // TODO
         PACKU {
             encoding: 0b0100100 :: rs2[4:0] :: rs1[4:0] :: 0b100 :: rd[4:0] :: 0b0110011;
-            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            assembly:"{name(rs2)}, {name(rs1)}, {name(rd)}";
             behavior: {
                 if(rd != 0) {
                     unsigned<XLEN> rs1_val = X[rs1];
@@ -630,7 +630,7 @@ InstructionSet Zbpo extends RISCVBase {  // extends Zpn?
         // TODO
         MIN {
             encoding: 0b0000101 :: rs2[4:0] :: rs1[4:0] :: 0b100 :: rd[4:0] :: 0b0110011;
-            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            assembly:"{name(rs2)}, {name(rs1)}, {name(rd)}";
             behavior: {
                 if(rd != 0) {
                     signed<32> rs1_val = X[rs1];
@@ -642,7 +642,7 @@ InstructionSet Zbpo extends RISCVBase {  // extends Zpn?
         }
         MAX {
             encoding: 0b0000101 :: rs2[4:0] :: rs1[4:0] :: 0b110 :: rd[4:0] :: 0b0110011;
-            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            assembly:"{name(rs2)}, {name(rs1)}, {name(rd)}";
             behavior: {
                 if(rd != 0) {
                     signed<32> rs1_val = X[rs1];
@@ -663,7 +663,7 @@ InstructionSet RV32Zbpo extends Zbpo {
         // TODO (MAX)
         CLZ {
             encoding: 0b0110000 :: 0b00000 :: rs1[4:0] :: 0b001 :: rd[4:0] :: 0b0010011;
-            args_disass:"{name(rd)}, {name(rs1)}";
+            assembly:"{name(rd)}, {name(rs1)}";
             behavior: {
                 if(rd != 0) {
                     unsigned<32> rs1_val = X[rs1];
@@ -709,7 +709,7 @@ InstructionSet Zpsfoperand extends RISCVBase {  // extends Zpbo?
         // r[dU].r[dL] = t64;
         SMAR64 {
             encoding: 0b1000010 :: rs2[4:0] :: rs1[4:0] :: 0b001 :: rd[4:0] :: 0b1110111;
-            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            assembly:"{name(rs2)}, {name(rs1)}, {name(rd)}";
             behavior: {
                 signed<64> rs1_val = X[rs1];
                 signed<64> rs2_val = X[rs2];
@@ -743,7 +743,7 @@ InstructionSet Zpsfoperand extends RISCVBase {  // extends Zpbo?
         // TODO
         MULR64 {
             encoding: 0b1111000 :: rs2[4:0] :: rs1[4:0] :: 0b001 :: rd[4:0] :: 0b1110111;
-            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            assembly:"{name(rs2)}, {name(rs1)}, {name(rd)}";
             behavior: {
                 unsigned<33> rs1_val = X[rs1];
                 unsigned<33> rs2_val = X[rs2];
@@ -769,7 +769,7 @@ InstructionSet RV32Zpsfoperand extends Zpsfoperand {
         // TODO
         ADD64 {
             encoding: 0b1100000 :: rs2[4:0] :: rs1[4:0] :: 0b001 :: rd[4:0] :: 0b1110111;
-            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            assembly:"{name(rs2)}, {name(rs1)}, {name(rd)}";
             behavior: {
                 signed<64> rs1_val_hi = X[rs1[4:1]*2+1];  // ???
                 unsigned<32> rs1_val_lo = X[rs1[4:1]*2];
@@ -785,7 +785,7 @@ InstructionSet RV32Zpsfoperand extends Zpsfoperand {
         // TODO
         SUB64 {
             encoding: 0b1100001 :: rs2[4:0] :: rs1[4:0] :: 0b001 :: rd[4:0] :: 0b1110111;
-            args_disass:"{name(rs2)}, {name(rs1)}, {name(rd)}";
+            assembly:"{name(rs2)}, {name(rs1)}, {name(rd)}";
             behavior: {
                 signed<64> rs1_val_hi = X[rs1[4:1]*2+1];  // ???
                 signed<32> rs1_val_lo = X[rs1[4:1]*2];
@@ -821,4 +821,3 @@ InstructionSet RV32P extends RV32Zpn, RV32Zbpo, RV32Zpsfoperand {
 //         unsigned<32>& VXSAT_CSR = CSR[VXSAT_ADDR];
 //     }
 // }
-
