@@ -234,15 +234,253 @@ InstructionSet RVZve64x extends RVZve32x {
     instructions {
         // -- Configuration-Setting Instructions
         // -- Vector Load and Store Instructions
-        // -- Vector Integer Arithmetic Instructions
-        // -- Vector Fixed-point Arithmetic Instructions
-        // -- Vector Single-Width Integer Reduction Instructions
-        // -- Vector Widening Integer Reduction Instructions
-        // -- Vector Mask Instructions
-        // -- Vector Permutation Instructions
-        // -- 2 Sort
+        VSOXSEG2EI64_V {
+            encoding: 3'b001 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG3EI64_V {
+            encoding: 3'b010 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG4EI64_V {
+            encoding: 3'b011 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG5EI64_V {
+            encoding: 3'b100 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG6EI64_V {
+            encoding: 3'b101 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG7EI64_V {
+            encoding: 3'b110 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG8EI64_V {
+            encoding: 3'b111 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG2EI64_V {
+            encoding: 3'b001 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG3EI64_V {
+            encoding: 3'b010 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG4EI64_V {
+            encoding: 3'b011 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG5EI64_V {
+            encoding: 3'b100 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG6EI64_V {
+            encoding: 3'b101 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG7EI64_V {
+            encoding: 3'b110 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG8EI64_V {
+            encoding: 3'b111 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG2EI64_V {
+            encoding: 3'b001 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG3EI64_V {
+            encoding: 3'b010 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG4EI64_V {
+            encoding: 3'b011 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG5EI64_V {
+            encoding: 3'b100 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG6EI64_V {
+            encoding: 3'b101 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG7EI64_V {
+            encoding: 3'b110 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG8EI64_V {
+            encoding: 3'b111 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG2EI64_V {
+            encoding: 3'b001 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG3EI64_V {
+            encoding: 3'b010 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG4EI64_V {
+            encoding: 3'b011 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG5EI64_V {
+            encoding: 3'b100 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG6EI64_V {
+            encoding: 3'b101 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG7EI64_V {
+            encoding: 3'b110 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG8EI64_V {
+            encoding: 3'b111 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXEI64_V {
+            encoding: 3'b000 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXEI64_V {
+            encoding: 3'b000 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXEI64_V {
+            encoding: 3'b000 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VL1RE64_V {
+            encoding: 3'b000 :: 1'b0 :: 2'b00 :: 1'b1 :: 5'b01000 :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VL2RE64_V {
+            encoding: 3'b001 :: 1'b0 :: 2'b00 :: 1'b1 :: 5'b01000 :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VL4RE64_V {
+            encoding: 3'b011 :: 1'b0 :: 2'b00 :: 1'b1 :: 5'b01000 :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VL8RE64_V {
+            encoding: 3'b111 :: 1'b0 :: 2'b00 :: 1'b1 :: 5'b01000 :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
         // Unitstride, 64 bit element
-        VLE64_U {
+        VLE64_V {
             encoding: 3'b000 :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
@@ -262,21 +500,42 @@ InstructionSet RVZve64x extends RVZve32x {
                 }
             }
         }
-        VLE64_S {
+        VLSE64_V {
             encoding: 3'b000 :: 1'b0 :: 2'b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
-        VLE64FF_U {
+        VLE64FF_V {
             encoding: 3'b000 :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b10000 :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
-        VLSEGE64 {
+        VSSSEGE64_V {
+            encoding: nf[2:0] :: 1'b0 :: 2'b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSSEGE64_V {
+            encoding: nf[2:0] :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLSSEGE64_V {
+            encoding: nf[2:0] :: 1'b0 :: 2'b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLSEGE64_V {
             encoding: nf[2:0] :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
@@ -284,7 +543,7 @@ InstructionSet RVZve64x extends RVZve32x {
             }
         }
         // Unitstride, 64 bit element
-        VSE64_U {
+        VSE64_V {
             encoding: 3'b000 :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b111 :: vs3[4:0] :: 7'b0100111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
@@ -304,13 +563,20 @@ InstructionSet RVZve64x extends RVZve32x {
                 }
             }
         }
-        VSE64_S {
+        VSSE64_V {
             encoding: 3'b000 :: 1'b0 :: 2'b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 3'b111 :: vs3[4:0] :: 7'b0100111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
+        // -- Vector Integer Arithmetic Instructions
+        // -- Vector Fixed-point Arithmetic Instructions
+        // -- Vector Single-Width Integer Reduction Instructions
+        // -- Vector Widening Integer Reduction Instructions
+        // -- Vector Mask Instructions
+        // -- Vector Permutation Instructions
+        // -- 2 Sort
     }
 }
 
@@ -530,24 +796,799 @@ InstructionSet RVZve32x extends RVVBase {
 
         }
         // -- Vector Load and Store Instructions
-        // vl[1,2,4,8]re[8,16,32,64].v?
-        // vle[8,16,32,64].v?
-        // vse[8,16,32,64].v?
-        // vle[8,16,32,64]ff.v?
-        // vlm.v?
-        // vsm.v?
-        // vloxei[8,16,32,64].v?
-        // vsoxei[8,16,32,64].v?
-        // vloxseg[?]ei[8,16,32,64].v?
-        // vluxseg[?]ei[8,16,32,64].v?
-        // vlse[8,16,32,64].v?
-        // vsse[8,16,32,64].v?
-        // vlseg[?]e[8,16,32,64].v?
         // vlsseg[?]e[8,16,32,64].v?
         // vsseg[?]e[8,16,32,64].v?
-        // vluxei[8,16,32,64].v?
-        // vsuxei[8,16,32,64].v?
-        // vs[1,2,4,8]r.v?
+        // vssseg[?]e[8,16,32,64].v?
+        ////
+        ////
+        // VL1R_V -> VL1RE8_V (pseudo)
+        // VL2R_V -> VL2RE8_V (pseudo)
+        // VL4R_V -> VL4RE8_V (pseudo)
+        // VL8R_V -> VL8RE8_V (pseudo)
+        VS1R_V { // TODO: check if eew allowed?
+            encoding: 3'b000 :: 1'b0 :: 2'b00 :: 1'b1 :: 5'b01000 :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VS2R_V { // TODO: check if eew allowed?
+            encoding: 3'b001 :: 1'b0 :: 2'b00 :: 1'b1 :: 5'b01000 :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VS4R_V { // TODO: check if eew allowed?
+            encoding: 3'b011 :: 1'b0 :: 2'b00 :: 1'b1 :: 5'b01000 :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VS8R_V { // TODO: check if eew allowed?
+            encoding: 3'b0111 :: 1'b0 :: 2'b00 :: 1'b1 :: 5'b01000 :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG2EI8_V {
+            encoding: 3'b001 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG2EI16_V {
+            encoding: 3'b001 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG2EI32_V {
+            encoding: 3'b001 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG3EI8_V {
+            encoding: 3'b010 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG3EI16_V {
+            encoding: 3'b010 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG3EI32_V {
+            encoding: 3'b010 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG4EI8_V {
+            encoding: 3'b011 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG4EI16_V {
+            encoding: 3'b011 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG4EI32_V {
+            encoding: 3'b011 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG5EI8_V {
+            encoding: 3'b100 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG5EI16_V {
+            encoding: 3'b100 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG5EI32_V {
+            encoding: 3'b100 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG6EI8_V {
+            encoding: 3'b101 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG6EI16_V {
+            encoding: 3'b101 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG6EI32_V {
+            encoding: 3'b101 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG7EI8_V {
+            encoding: 3'b110 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG7EI16_V {
+            encoding: 3'b110 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG7EI32_V {
+            encoding: 3'b110 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG8EI8_V {
+            encoding: 3'b111 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG8EI16_V {
+            encoding: 3'b111 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXSEG8EI32_V {
+            encoding: 3'b111 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG2EI8_V {
+            encoding: 3'b001 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG2EI16_V {
+            encoding: 3'b001 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG2EI32_V {
+            encoding: 3'b001 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG3EI8_V {
+            encoding: 3'b010 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG3EI16_V {
+            encoding: 3'b010 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG3EI32_V {
+            encoding: 3'b010 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG4EI8_V {
+            encoding: 3'b011 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG4EI16_V {
+            encoding: 3'b011 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG4EI32_V {
+            encoding: 3'b011 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG5EI8_V {
+            encoding: 3'b100 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG5EI16_V {
+            encoding: 3'b100 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG5EI32_V {
+            encoding: 3'b100 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG6EI8_V {
+            encoding: 3'b101 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG6EI16_V {
+            encoding: 3'b101 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG6EI32_V {
+            encoding: 3'b101 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG7EI8_V {
+            encoding: 3'b110 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG7EI16_V {
+            encoding: 3'b110 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG7EI32_V {
+            encoding: 3'b110 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG8EI8_V {
+            encoding: 3'b111 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG8EI16_V {
+            encoding: 3'b111 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXSEG8EI32_V {
+            encoding: 3'b111 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG2EI8_V {
+            encoding: 3'b001 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG2EI16_V {
+            encoding: 3'b001 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG2EI32_V {
+            encoding: 3'b001 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG3EI8_V {
+            encoding: 3'b010 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG3EI16_V {
+            encoding: 3'b010 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG3EI32_V {
+            encoding: 3'b010 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG4EI8_V {
+            encoding: 3'b011 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG4EI16_V {
+            encoding: 3'b011 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG4EI32_V {
+            encoding: 3'b011 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG6EI8_V {
+            encoding: 3'b101 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG6EI16_V {
+            encoding: 3'b101 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG6EI32_V {
+            encoding: 3'b101 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG5EI8_V {
+            encoding: 3'b100 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG5EI16_V {
+            encoding: 3'b100 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG5EI32_V {
+            encoding: 3'b100 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG8EI8_V {
+            encoding: 3'b111 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG8EI16_V {
+            encoding: 3'b111 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG8EI32_V {
+            encoding: 3'b111 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG3EI8_V {
+            encoding: 3'b010 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG3EI16_V {
+            encoding: 3'b010 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG3EI32_V {
+            encoding: 3'b010 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG2EI8_V {
+            encoding: 3'b001 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG2EI16_V {
+            encoding: 3'b001 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG2EI32_V {
+            encoding: 3'b001 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG4EI8_V {
+            encoding: 3'b011 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG4EI16_V {
+            encoding: 3'b011 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG4EI32_V {
+            encoding: 3'b011 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG5EI8_V {
+            encoding: 3'b100 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG5EI16_V {
+            encoding: 3'b100 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG5EI32_V {
+            encoding: 3'b100 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG6EI8_V {
+            encoding: 3'b101 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG6EI16_V {
+            encoding: 3'b101 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG6EI32_V {
+            encoding: 3'b101 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG7EI8_V {
+            encoding: 3'b110 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG7EI16_V {
+            encoding: 3'b110 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXSEG7EI32_V {
+            encoding: 3'b110 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG7EI8_V {
+            encoding: 3'b110 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG7EI16_V {
+            encoding: 3'b110 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG7EI32_V {
+            encoding: 3'b110 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG8EI8_V {
+            encoding: 3'b111 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG8EI16_V {
+            encoding: 3'b111 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXSEG8EI32_V {
+            encoding: 3'b111 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXEI8_V {
+            encoding: 3'b000 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXEI16_V {
+            encoding: 3'b000 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSOXEI32_V {
+            encoding: 3'b000 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXEI8_V {
+            encoding: 3'b000 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXEI16_V {
+            encoding: 3'b000 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSUXEI32_V {
+            encoding: 3'b000 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXEI8_V {
+            encoding: 3'b000 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXEI16_V {
+            encoding: 3'b000 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLOXEI32_V {
+            encoding: 3'b000 :: 1'b0 :: 2'b11 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXEI8_V {
+            encoding: 3'b000 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXEI16_V {
+            encoding: 3'b000 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLUXEI32_V {
+            encoding: 3'b000 :: 1'b0 :: 2'b01 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VL1RE8_V {
+            encoding: 3'b000 :: 1'b0 :: 2'b00 :: 1'b1 :: 5'b01000 :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VL2RE8_V {
+            encoding: 3'b001 :: 1'b0 :: 2'b00 :: 1'b1 :: 5'b01000 :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VL4RE8_V {
+            encoding: 3'b011 :: 1'b0 :: 2'b00 :: 1'b1 :: 5'b01000 :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VL8RE8_V {
+            encoding: 3'b111 :: 1'b0 :: 2'b00 :: 1'b1 :: 5'b01000 :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VL1RE16_V {
+            encoding: 3'b000 :: 1'b0 :: 2'b00 :: 1'b1 :: 5'b01000 :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VL2RE16_V {
+            encoding: 3'b001 :: 1'b0 :: 2'b00 :: 1'b1 :: 5'b01000 :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VL4RE16_V {
+            encoding: 3'b011 :: 1'b0 :: 2'b00 :: 1'b1 :: 5'b01000 :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VL8RE16_V {
+            encoding: 3'b111 :: 1'b0 :: 2'b00 :: 1'b1 :: 5'b01000 :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VL1RE32_V {
+            encoding: 3'b000 :: 1'b0 :: 2'b00 :: 1'b1 :: 5'b01000 :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VL2RE32_V {
+            encoding: 3'b001 :: 1'b0 :: 2'b00 :: 1'b1 :: 5'b01000 :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VL4RE32_V {
+            encoding: 3'b011 :: 1'b0 :: 2'b00 :: 1'b1 :: 5'b01000 :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VL8RE32_V {
+            encoding: 3'b111 :: 1'b0 :: 2'b00 :: 1'b1 :: 5'b01000 :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
         // This conflicts with the FLW/FSW encoding of the RV32F instruction set
         // VLE_U {
         //     encoding: 3'b000 :: mew[0:0] :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: width[2:0] :: vd[4:0] :: 7'b0000111;
@@ -570,7 +1611,7 @@ InstructionSet RVZve32x extends RVVBase {
         //     }
         // }
         // Unitstride, 8 bit element
-        VLE8_U {
+        VLE8_V {
             encoding: 3'b000 :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
@@ -590,8 +1631,16 @@ InstructionSet RVZve32x extends RVVBase {
                 }
             }
         }
+        // Unitstride, 8 bit element
+        VLE8_V {
+            encoding: 3'b000 :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
         // Unitstride, 16 bit element
-        VLE16_U {
+        VLE16_V {
             encoding: 3'b000 :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
@@ -612,7 +1661,7 @@ InstructionSet RVZve32x extends RVVBase {
             }
         }
         // Unitstride, 32 bit element
-        VLE32_U {
+        VLE32_V {
             encoding: 3'b000 :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
@@ -633,42 +1682,42 @@ InstructionSet RVZve32x extends RVVBase {
             }
         }
         // Strided, 8 bit element
-        VLE8_S {
+        VLSE8_V {
             encoding: 3'b000 :: 1'b0 :: 2'b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
-        VLE16_S {
+        VLSE16_V {
             encoding: 3'b000 :: 1'b0 :: 2'b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
-        VLE32_S {
+        VLSE32_V {
             encoding: 3'b000 :: 1'b0 :: 2'b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
-        VLE8FF_U {
+        VLE8FF_V {
             encoding: 3'b000 :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b10000 :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
-        VLE16FF_U {
+        VLE16FF_V {
             encoding: 3'b000 :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b10000 :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
-        VLE32FF_U {
+        VLE32FF_V {
             encoding: 3'b000 :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b10000 :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
@@ -690,22 +1739,85 @@ InstructionSet RVZve32x extends RVVBase {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
-        VLSEGE8 {
+        VLSSEGE8_V {
+            encoding: nf[2:0] :: 1'b0 :: 2'b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLSSEGE16_V {
+            encoding: nf[2:0] :: 1'b0 :: 2'b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLSSEGE32_V {  // nf: 1-7 (nfields: 2-8)
+            encoding: nf[2:0] :: 1'b0 :: 2'b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLSEGE8_V {
             encoding: nf[2:0] :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
-        VLSEGE16 {
+        VLSEGE16_V {
             encoding: nf[2:0] :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
-        VLSEGE32 {
+        VLSEGE32_V {  // nf: 1-7 (nfields: 2-8)
             encoding: nf[2:0] :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSSSEGE8_V {
+            encoding: nf[2:0] :: 1'b0 :: 2'b00 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSSSEGE16_V {
+            encoding: nf[2:0] :: 1'b0 :: 2'b00 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 3'b101 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSSSEGE32_V {  // nf: 1-7 (nfields: 2-8)
+            encoding: nf[2:0] :: 1'b0 :: 2'b00 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 3'b110 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSSEGE8_V {
+            encoding: nf[2:0] :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSSEGE16_V {
+            encoding: nf[2:0] :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b101 :: vs3[4:0] :: 7'b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSSEGE32_V {  // nf: 1-7 (nfields: 2-8)
+            encoding: nf[2:0] :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b110 :: vs3[4:0] :: 7'b0100111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
@@ -797,21 +1909,21 @@ InstructionSet RVZve32x extends RVVBase {
             }
         }
         // Strided, 8 bit element
-        VSE8_S {
+        VSSE8_V {
             encoding: 3'b000 :: 1'b0 :: 2'b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
-        VSE16_S {
+        VSSE16_V {
             encoding: 3'b000 :: 1'b0 :: 2'b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 3'b101 :: vs3[4:0] :: 7'b0100111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
-        VSE32_S {
+        VSSE32_V {
             encoding: 3'b000 :: 1'b0 :: 2'b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 3'b110 :: vs3[4:0] :: 7'b0100111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
@@ -2475,18 +3587,7 @@ InstructionSet RVZve32x extends RVVBase {
                 }
             }
         }
-        // -- 2 Sort
-
-
-
-
-
-
-        // TODO: vmv.f.s vmv.s.f (requires floating point registers)
-
-
     }
-
 }
 
 
