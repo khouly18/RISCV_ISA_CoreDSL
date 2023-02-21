@@ -36,19 +36,19 @@ InstructionSet RV64I extends RV32I {
         }
 
         SLLI {
-            encoding: 0b000000 :: shamt[5:0] :: rs1[4:0] :: 3'b001 :: rd[4:0] :: 7'b0010011;
+            encoding: 6'b000000 :: shamt[5:0] :: rs1[4:0] :: 3'b001 :: rd[4:0] :: 7'b0010011;
             assembly:"{name(rd)}, {name(rs1)}, {shamt}";
             behavior: if ((rd % RFS) != 0) X[rd % RFS] = X[rs1 % RFS] << shamt;
         }
 
         SRLI {
-            encoding: 0b000000 :: shamt[5:0] :: rs1[4:0] :: 3'b101 :: rd[4:0] :: 7'b0010011;
+            encoding: 6'b000000 :: shamt[5:0] :: rs1[4:0] :: 3'b101 :: rd[4:0] :: 7'b0010011;
             assembly:"{name(rd)}, {name(rs1)}, {shamt}";
             behavior: if ((rd % RFS) != 0) X[rd % RFS] = X[rs1 % RFS] >> shamt;
         }
 
         SRAI {
-            encoding: 0b010000 :: shamt[5:0] :: rs1[4:0] :: 3'b101 :: rd[4:0] :: 7'b0010011;
+            encoding: 6'b010000 :: shamt[5:0] :: rs1[4:0] :: 3'b101 :: rd[4:0] :: 7'b0010011;
             assembly:"{name(rd)}, {name(rs1)}, {shamt}";
             behavior: if ((rd % RFS) != 0) X[rd % RFS] = ((signed)X[rs1 % RFS]) >> shamt;
         }
