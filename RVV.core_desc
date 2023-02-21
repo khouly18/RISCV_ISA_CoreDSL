@@ -1,38 +1,324 @@
+/*
+
+      V
+      |
+    Zve64d
+      |
+    Zve64f
+   /      \
+Zve64x   Zve32f
+   \      /
+    Zve32x
+
+Sections:
+  misa.v bit
+  eew in [8,16,32,64]
+  vlen >= 128
+Configuration-Setting Instructions
+Vector Load and Store Instructions
+  xlen=32 -> eew != 64
+  xlen=64:
+Vector Integer Arithmetic Instructions
+  zve64* + eew=64 -> NO vmulh.vv, vmulh.vx, vmulhu.vv, vmulhu.vx, vmulhsu.vv, vmulhsu.vx (integer multiply variants that return the high word of the product)
+Vector Fixed-point Arithmetic Instructions
+  zve64* + eew=64 -> NO vsmul.vv/vsmul.vx
+Vector Single-Width Integer Reduction Instructions
+Vector Widening Integer Reduction Instructions
+Vector Mask Instructions
+Vector Permutation Instructions
+  zve32x,zve64x -> NO floating-point scalar move instructions
+Vector Floating-Point Instructions
+  eew=32
+  v,zve64d -> eew=64
+  v,zve64d -> +widening instructions/conversions(32->64)
+Vector Single-Width Floating-Point reduction Instructions
+  eew=32
+  v,zve64d -> eew=64
+  v,zve64d -> +widening reductions(32->64)
+*/
+/*
+*/
+
 import "RV32I.core_desc"
 import "RISCVBase.core_desc"
 
-InstructionSet RV32V extends Zicsr {
-    architectural_state {
-        unsigned<32> VLEN = 1024;
-        // user-writeable
-        unsigned<32> VSTART_ADDR = 0x008;
-        unsigned<32>& VSTART_CSR = CSR[VSTART_ADDR];
-        unsigned<32> VXSAT_ADDR = 0x009;
-        unsigned<32>& VXSAT_CSR = CSR[VXSAT_ADDR];
-        unsigned<32> VXRM_ADDR = 0x00A;
-        unsigned<32>& VXRM_CSR = CSR[VXRM_ADDR];
-        unsigned<32> VCSR_ADDR = 0x00F;
-        unsigned<32>& VCSR_CSR = CSR[VCSR_ADDR];
+InstructionSet RV32V extends RVV {
+}
 
-        // not user-writable
-        unsigned<32> VL_ADDR = 0xC20;
-        unsigned<32>& VL_CSR = CSR[VL_ADDR];
-        unsigned<32> VTYPE_ADDR = 0xC21;
-        unsigned<32>& VTYPE_CSR = CSR[VTYPE_ADDR];
+/*InstructionSet RV64V extends RV32V{}*/
 
-        // read-only constant csr
-        unsigned<32> VLENB_ADDR = 0xC22;
-        unsigned<32>& VLENB_CSR = CSR[VLENB_ADDR];
 
-        // vector register address space
-        extern unsigned char V[VLEN * 32];
+InstructionSet RVV extends RVZve64d {
+// What missing?
+        // -- Configuration-Setting Instructions
+        // -- Vector Load and Store Instructions
+        // -- Vector Integer Arithmetic Instructions
+        // -- Vector Fixed-point Arithmetic Instructions
+        // -- Vector Single-Width Integer Reduction Instructions
+        // -- Vector Widening Integer Reduction Instructions
+        // -- Vector Mask Instructions
+        // -- Vector Permutation Instructions
+        // -- Vector Floating-Point Instructions
+        // -- Vector Single-Width Floating-Point Reduction Instructions
+        // -- Vector Widening Floating-Point Reduction Instructions
+        // -- 2 Sort
+}
+
+InstructionSet RVZve64d extends RVZve64f {
+// + double precision
+    // functions {
+    //     bool validate_rvv() {
+    //         unsigned<XLEN> _eew = vcfg_concatEEW(mew, width);
+    //         return extension_enabled("V") && extension_enabled("F") && (_eew == 32 || _eew == 64);
+    //     }
+    // }
+        // -- Configuration-Setting Instructions
+        // -- Vector Load and Store Instructions
+        // -- Vector Integer Arithmetic Instructions
+        // -- Vector Fixed-point Arithmetic Instructions
+        // -- Vector Single-Width Integer Reduction Instructions
+        // -- Vector Widening Integer Reduction Instructions
+        // -- Vector Mask Instructions
+        // -- Vector Permutation Instructions
+        // -- Vector Floating-Point Instructions
+        //    v,zve64d -> eew=64
+        //    v,zve64d -> +widening instructions/conversions(32->64)
+        // -- Vector Single-Width Floating-Point Reduction Instructions
+        //    v,zve64d -> eew=64
+        // -- Vector Widening Floating-Point Reduction Instructions
+        //    v,zve64d only
+        // -- 2 Sort
+}
+
+InstructionSet RVZve64f extends RVZve32f, RVZve64x {
+// Ensure?
+    // functions {
+    //     bool validate_rvv() {
+    //         unsigned<XLEN> _eew = vcfg_concatEEW(mew, width);
+    //         return extension_enabled("V") && extension_enabled("F") && (_eew == 32);
+    //     }
+    // }
+        // -- Configuration-Setting Instructions
+        // -- Vector Load and Store Instructions
+        // -- Vector Integer Arithmetic Instructions
+        // -- Vector Fixed-point Arithmetic Instructions
+        // -- Vector Single-Width Integer Reduction Instructions
+        // -- Vector Widening Integer Reduction Instructions
+        // -- Vector Mask Instructions
+        // -- Vector Permutation Instructions
+        // -- Vector Floating-Point Instructions
+        // -- Vector Single-Width Floating-Point Reduction Instructions
+        // -- Vector Widening Floating-Point Reduction Instructions
+        // -- 2 Sort
+}
+
+InstructionSet RVZve32f extends RVZve32x {
+// + single precision
+    // functions {
+    //     bool validate_rvv() {
+    //         unsigned<XLEN> _eew = vcfg_concatEEW(mew, width);
+    //         return extension_enabled("V") && extension_enabled("F") && _eew == 32;
+    //     }
+    // }
+    // instructions [[enable=validate_rvv()]]{
+    instructions {
+        // -- Configuration-Setting Instructions
+        // -- Vector Load and Store Instructions
+        // -- Vector Integer Arithmetic Instructions
+        // -- Vector Fixed-point Arithmetic Instructions
+        // -- Vector Single-Width Integer Reduction Instructions
+        // -- Vector Widening Integer Reduction Instructions
+        // -- Vector Mask Instructions
+        // -- Vector Permutation Instructions
+        // -- Vector Floating-Point Instructions
+        // vfadd.vf?
+        // vfadd.vv?
+        // vfclass.v?
+        // vfcvt.f.x.v?
+        // vfcvt.f.xu.v?
+        // vfcvt.rtz.x.f.v?
+        // vfcvt.rtz.xu.f.v?
+        // vfcvt.x.f.v?
+        // vfcvt.xu.f.v?
+        // vfdiv.vf?
+        // vfdiv.vv?
+        // vfmadd.vf?
+        // vfmadd.vv?
+        // vfmax.vf?
+        // vfmax.vv?
+        // vfmerge.vfm?
+        // vfmin.vf?
+        // vfmin.vv?
+        // vfmsac.vf?
+        // vfmsac.vv?
+        // vfmsub.vf?
+        // vfmsub.vv?
+        // vfmul.vf?
+        // vfmul.vv?
+        // vfncvt.f.f.w?
+        // vfncvt.f.x.w?
+        // vfncvt.f.xu.w?
+        // vfncvt.rod.f.f.w?
+        // vfncvt.rtz.x.f.w?
+        // vfncvt.rtz.xu.f.w?
+        // vfncvt.x.f.w?
+        // vfncvt.xu.f.w?
+        // vfnmacc.vf?
+        // vfnmacc.vv?
+        // vfnmadd.vf?
+        // vfnmadd.vv?
+        // vfnmsac.vf?
+        // vfnmsac.vv?
+        // vfnmsub.vf?
+        // vfnmsub.vv?
+        // vfrdiv.vf?
+        // vfrec7.v?
+        // vfrsub.vf?
+        // vfsgnj.vf?
+        // vfsgnj.vv?
+        // vfsgnjn.vf?
+        // vfsgnjn.vv?
+        // vfsgnjx.vf?
+        // vfsgnjx.vv?
+        // vfsqrt7.v?
+        // vfsrqt.v?
+        // vfsub.vf?
+        // vfsub.vv?
+        // vfwadd.vf?
+        // vfwadd.wv?
+        // vfwadd.wf?
+        // vfwadd.vv?
+        // vfwcvt.f.f.v?
+        // vfwcvt.f.x.v?
+        // vfwcvt.f.xu.v?
+        // vfwcvt.rtz.x.f.v?
+        // vfwcvt.rtz.xu.f.v?
+        // vfwcvt.x.f.v?
+        // vfwcvt.xu.f.v?
+        // vfwmacc.vf?
+        // vfwmacc.vv?
+        // vfwmsac.vf?
+        // vfwmsac.vv?
+        // vfwmul.vf?
+        // vfwmul.vv?
+        // vfwnmacc.vf?
+        // vfwnmacc.vv?
+        // -- Vector Single-Width Floating-Point Reduction Instructions
+        // vfredmax.vs?
+        // vfredmin.vs?
+        // vfredosum.vs?
+        // vfredusum.vs?
+        // -- Vector Widening Floating-Point Reduction Instructions
+        // vfwredosum.vs?
+        // vfwredusum.vs?
+        // -- 2 Sort
+        VFMERGE {
+          encoding: 0b010111 :: 0b0 :: vs2[4:0] :: rs1[4:0] :: 0b101 :: vd[4:0] :: 0b1010111;
+            assembly:"{name(vd)}, {name(vs1)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VFMV_V_F {
+          encoding: 0b010111 :: 0b1 :: 0b00000 :: rs1[4:0] :: 0b101 :: vd[4:0] :: 0b1010111;
+            assembly:"{name(vd)}, {name(vs1)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
     }
+}
+
+InstructionSet RVZve64x extends RVZve32x {
+// +eew=64
+    instructions {
+        // -- Configuration-Setting Instructions
+        // -- Vector Load and Store Instructions
+        // -- Vector Integer Arithmetic Instructions
+        // -- Vector Fixed-point Arithmetic Instructions
+        // -- Vector Single-Width Integer Reduction Instructions
+        // -- Vector Widening Integer Reduction Instructions
+        // -- Vector Mask Instructions
+        // -- Vector Permutation Instructions
+        // -- 2 Sort
+        // Unitstride, 64 bit element
+        VLE64_U {
+            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b111 :: vd[4:0] :: 0b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _eew = vcfg_concatEEW(0b0, 0b111);
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = etiss_vload_encoded_unitstride(V, _vtype, vm, _eew, vd, _vstart, _vlen, _vl, (unsigned<64>)X[rs1]); // V, MEM[-1],
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+        VLE64_S {
+            encoding: 0b000 :: 0b0 :: 0b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 0b111 :: vd[4:0] :: 0b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLE64FF_U {
+            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b10000 :: rs1[4:0] :: 0b111 :: vd[4:0] :: 0b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLSEGE64 {
+            encoding: nf[2:0] :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b111 :: vd[4:0] :: 0b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        // Unitstride, 64 bit element
+        VSE64_U {
+            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b111 :: vs3[4:0] :: 0b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _eew = vcfg_concatEEW(0b0, 0b111);
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = etiss_vstore_encoded_unitstride(V, _vtype, vm, _eew, vs3, _vstart, _vlen, _vl, (unsigned<64>)X[rs1]); //V, MEM[-1],
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+        VSE64_S {
+            encoding: 0b000 :: 0b0 :: 0b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 0b111 :: vs3[4:0] :: 0b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+    }
+}
+
+InstructionSet RVZve32x extends RVVBase {
+
+// No float
+// No eew=64
     functions {
-        extern unsigned<8> vtype_extractSEW(unsigned<16>);
-        extern unsigned<8> vtype_extractLMUL(unsigned<16>);
-        extern unsigned<8> vtype_extractTA(unsigned<16>);
-        extern unsigned<8> vtype_extractMA(unsigned<16>);
-        extern unsigned<16> vcfg_concatEEW(unsigned<8> mew, unsigned<8> width);
         extern unsigned<8> etiss_vload_encoded_unitstride(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<16> pEEW, unsigned<8> pVd, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<64> pMSTART) [[etiss_needs_arch]];
         extern unsigned<8> etiss_vstore_encoded_unitstride(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<16> pEEW, unsigned<8> pVd, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<64> pMSTART) [[etiss_needs_arch]];
         extern unsigned<8> vadd_vv(char* pV, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs1, unsigned<8> pVs2, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL);
@@ -107,9 +393,10 @@ InstructionSet RV32V extends Zicsr {
         extern unsigned<8> vslide1down_vx(char* pV, char* pR, unsigned<16> pVTYPE, unsigned<8> pVm, unsigned<8> pVd, unsigned<8> pVs2, unsigned<8> pRs1, unsigned<16> pVSTART, unsigned<16> pVLEN, unsigned<16> pVL, unsigned<8> pXLEN);
     }
     instructions {
+        // -- Configuration-Setting Instructions
         VSETVLI {
             encoding: 0b0 :: zimm[10:0] :: rs1[4:0] :: 0b111 :: rd[4:0] :: 0b1010111;
-            args_disass:"{name(rd)}, {name(rs1)}, {zimm}";
+            assembly:"{name(rd)}, {name(rs1)}, {zimm}";
             behavior: {
                 if(!(CSR[CSR_MSTATUS] & MSTATUS_VS)){
                     raise(0, 2);  // vpu not enabled
@@ -174,14 +461,14 @@ InstructionSet RV32V extends Zicsr {
 
         VSETIVLI {
             encoding: 0b0 :: 0b0 :: zimm[9:0] :: uimm[4:0] :: 0b111 :: rd[4:0] :: 0b1010111;
-            args_disass:"{name(rd)}, {name(rs1)}, {zimm}";
+            assembly:"{name(rd)}, {name(rs1)}, {zimm}";
             behavior: {
                 unsigned<32> _vlmax = 0;
             }
         }
         VSETVL {
             encoding: 0b1 :: 0b000000 :: rs2[4:0] :: rs1[4:0] :: 0b111 :: rd[4:0] :: 0b1010111;
-            args_disass:"{name(rd)}, {name(rs1)}, {name(rs2)}";
+            assembly:"{name(rd)}, {name(rs1)}, {name(rs2)}";
             behavior: {
 
                 unsigned<11> zimm[11] = X[rs2];
@@ -242,10 +529,29 @@ InstructionSet RV32V extends Zicsr {
             }
 
         }
+        // -- Vector Load and Store Instructions
+        // vl[1,2,4,8]re[8,16,32,64].v?
+        // vle[8,16,32,64].v?
+        // vse[8,16,32,64].v?
+        // vle[8,16,32,64]ff.v?
+        // vlm.v?
+        // vsm.v?
+        // vloxei[8,16,32,64].v?
+        // vsoxei[8,16,32,64].v?
+        // vloxseg[?]ei[8,16,32,64].v?
+        // vluxseg[?]ei[8,16,32,64].v?
+        // vlse[8,16,32,64].v?
+        // vsse[8,16,32,64].v?
+        // vlseg[?]e[8,16,32,64].v?
+        // vlsseg[?]e[8,16,32,64].v?
+        // vsseg[?]e[8,16,32,64].v?
+        // vluxei[8,16,32,64].v?
+        // vsuxei[8,16,32,64].v?
+        // vs[1,2,4,8]r.v?
         // This conflicts with the FLW/FSW encoding of the RV32F instruction set
         // VLE_U {
         //     encoding: 0b000 :: mew[0:0] :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: width[2:0] :: vd[4:0] :: 0b0000111;
-        //     args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+        //     assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
         //     behavior: {
 
         //         unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -266,7 +572,7 @@ InstructionSet RV32V extends Zicsr {
         // Unitstride, 8 bit element
         VLE8_U {
             encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b000 :: vd[4:0] :: 0b0000111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -287,7 +593,7 @@ InstructionSet RV32V extends Zicsr {
         // Unitstride, 16 bit element
         VLE16_U {
             encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b101 :: vd[4:0] :: 0b0000111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -308,7 +614,7 @@ InstructionSet RV32V extends Zicsr {
         // Unitstride, 32 bit element
         VLE32_U {
             encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b0000111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -326,30 +632,52 @@ InstructionSet RV32V extends Zicsr {
                 }
             }
         }
-        // Unitstride, 64 bit element
-        VLE64_U {
-            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b111 :: vd[4:0] :: 0b0000111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+        // Strided, 8 bit element
+        VLE8_S {
+            encoding: 0b000 :: 0b0 :: 0b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 0b000 :: vd[4:0] :: 0b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
-
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _eew = vcfg_concatEEW(0b0, 0b111);
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
-
-                unsigned<XLEN> ret = etiss_vload_encoded_unitstride(V, _vtype, vm, _eew, vd, _vstart, _vlen, _vl, (unsigned<64>)X[rs1]); // V, MEM[-1],
-                if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
-                    raise(0, 2);
-                } else{
-                    CSR[VSTART_ADDR] = 0;
-                }
+            }
+        }
+        VLE16_S {
+            encoding: 0b000 :: 0b0 :: 0b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 0b101 :: vd[4:0] :: 0b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLE32_S {
+            encoding: 0b000 :: 0b0 :: 0b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLE8FF_U {
+            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b10000 :: rs1[4:0] :: 0b000 :: vd[4:0] :: 0b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLE16FF_U {
+            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b10000 :: rs1[4:0] :: 0b101 :: vd[4:0] :: 0b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VLE32FF_U {
+            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b10000 :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b0000111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VLM_V {
             encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b01011 :: rs1[4:0] :: 0b000 :: vd[4:0] :: 0b0000111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
@@ -357,35 +685,28 @@ InstructionSet RV32V extends Zicsr {
 
         VLR_V {
             encoding: nf[2:0] :: 0b0 :: 0b00 :: 0b1 :: 0b01000 :: rs1[4:0] :: 0b000 :: vd[4:0] :: 0b0000111;
-            args_disass:"{name(vs3)}, ({name(rs1)})";
+            assembly:"{name(vs3)}, ({name(rs1)})";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VLSEGE8 {
             encoding: nf[2:0] :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b000 :: vd[4:0] :: 0b0000111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VLSEGE16 {
             encoding: nf[2:0] :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b101 :: vd[4:0] :: 0b0000111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VLSEGE32 {
             encoding: nf[2:0] :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b0000111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
-            behavior: {
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-            }
-        }
-        VLSEGE64 {
-            encoding: nf[2:0] :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b111 :: vd[4:0] :: 0b0000111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
@@ -394,7 +715,7 @@ InstructionSet RV32V extends Zicsr {
         // This conflicts with the FLW/FSW encoding of the RV32F instruction set
         // VSE_U {
         //     encoding: 0b000 :: mew[0:0] :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: width[2:0] :: vs3[4:0] :: 0b0100111;
-        //     args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+        //     assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
         //     behavior: {
 
         //         unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -415,7 +736,7 @@ InstructionSet RV32V extends Zicsr {
         // Unitstride, 8 bit element
         VSE8_U {
             encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b000 :: vs3[4:0] :: 0b0100111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -436,7 +757,7 @@ InstructionSet RV32V extends Zicsr {
         // Unitstride, 16 bit element
         VSE16_U {
             encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b101 :: vs3[4:0] :: 0b0100111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -457,7 +778,7 @@ InstructionSet RV32V extends Zicsr {
         // Unitstride, 32 bit element
         VSE32_U {
             encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b110 :: vs3[4:0] :: 0b0100111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -475,44 +796,117 @@ InstructionSet RV32V extends Zicsr {
                 }
             }
         }
-        // Unitstride, 64 bit element
-        VSE64_U {
-            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b111 :: vs3[4:0] :: 0b0100111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+        // Strided, 8 bit element
+        VSE8_S {
+            encoding: 0b000 :: 0b0 :: 0b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 0b000 :: vs3[4:0] :: 0b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
-
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _eew = vcfg_concatEEW(0b0, 0b111);
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
-
-                unsigned<XLEN> ret = etiss_vstore_encoded_unitstride(V, _vtype, vm, _eew, vs3, _vstart, _vlen, _vl, (unsigned<64>)X[rs1]); //V, MEM[-1],
-                if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
-                    raise(0, 2);
-                } else{
-                    CSR[VSTART_ADDR] = 0;
-                }
+            }
+        }
+        VSE16_S {
+            encoding: 0b000 :: 0b0 :: 0b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 0b101 :: vs3[4:0] :: 0b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSE32_S {
+            encoding: 0b000 :: 0b0 :: 0b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 0b110 :: vs3[4:0] :: 0b0100111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VSM_V {
             encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b01011 :: rs1[4:0] :: 0b000 :: vs3[4:0] :: 0b0100111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VSR_V {
             encoding: nf[2:0] :: 0b0 :: 0b00 :: 0b1 :: 0b01000 :: rs1[4:0] :: 0b000 :: vs3[4:0] :: 0b0100111;
-            args_disass:"{name(vs3)}, ({name(rs1)})";
+            assembly:"{name(vs3)}, ({name(rs1)})";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
+        // -- Vector Integer Arithmetic Instructions
+        // vadc.vim?
+        // vadc.vvm?
+        // vadc.vxm?
+        // vdiv.vv?
+        // vdiv.vx?
+        // vdivu.vv?
+        // vdivu.vx?
+        // vmacc.vv?
+        // vmacc.vx?
+        // vmadc.vi?
+        // vmadc.vim?
+        // vmadc.vv?
+        // vmadc.vvm?
+        // vmadc.vx?
+        // vmadc.vxm?
+        // vmadd.vv?
+        // vmadd.vx?
+        // vmax.vv?
+        // vmax.vx?
+        // vmaxu.vv?
+        // vmaxu.vx?
+        // vmerge.vim?
+        // vmerge.vvm?
+        // vmerge.vxm?
+        // vmin.vv?
+        // vmin.vx?
+        // vminu.vv?
+        // vminu.vx?
+        // vmsbc.vv?
+        // vmsbc.vvm?
+        // vmsbc.vxm?
+        // vmsgtu.vi?
+        // vmul.vv?
+        // vmul.vx?
+        // vmulh.vv?
+        // vmulh.vx?
+        // vmulhsu.vv?
+        // vmulhsu.vx?
+        // vmulhu.vv?
+        // vmulhu.vx?
+        // vnmsac.vv?
+        // vnmsac.vx?
+        // vnmsub.vv?
+        // vnmsub.vx?
+        // vnsra.wi?
+        // vnsra.wv?
+        // vnsra.wx?
+        // vnsrl.wi?
+        // vnsrl.wv?
+        // vnsrl.wx?
+        // vrem.vv?
+        // vrem.vx?
+        // vremu.vv?
+        // vremu.vx?
+        // vrsub.vi?
+        // vrsub.vx?
+        // vsbc.vvm?
+        // vsbc.vxm?
+        // vsext.vf2?
+        // vsext.vf4?
+        // vsext.vf8?
+        // vwadd.wv?
+        // vwadd.wx?
+        // vwaddu.wv?
+        // vwaddu.wx?
+        // vwmacc.vv?
+        // vwmaccsu.vv?
+        // vwmaccsu.vx?
+        // vwmaccu.vx?
+        // vwmaccu.vv?
+        // vwmacc.vx?
         VADD_VV {
             encoding: 0b000000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -532,7 +926,7 @@ InstructionSet RV32V extends Zicsr {
 
         VADD_VI {
             encoding: 0b000000 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -549,18 +943,9 @@ InstructionSet RV32V extends Zicsr {
                 }
             }
         }
-
-        VMVR_V {
-            encoding: 0b100111 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
-            behavior: {
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-            }
-        }
-
         VADD_VX {
             encoding: 0b000000 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -580,7 +965,7 @@ InstructionSet RV32V extends Zicsr {
 
         VSUB_VV {
             encoding: 0b000010 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -600,7 +985,7 @@ InstructionSet RV32V extends Zicsr {
 
         VSUB_VX {
             encoding: 0b000010 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -617,17 +1002,9 @@ InstructionSet RV32V extends Zicsr {
                }
            }
         }
-        VREDSUM {
-            encoding: 0b000000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b010 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
-            behavior: {
-
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-            }
-        }
         VWMUL_VV {
             encoding: 0b111011 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b010 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
@@ -635,15 +1012,14 @@ InstructionSet RV32V extends Zicsr {
 
         VWMUL_VX {
             encoding: 0b111011 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
-
         VWADDU_VV {
             encoding: 0b110000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b010 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -663,7 +1039,7 @@ InstructionSet RV32V extends Zicsr {
 
         VWADDU_VX {
             encoding: 0b110000 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -682,14 +1058,14 @@ InstructionSet RV32V extends Zicsr {
         }
         VMUL_VV {
             encoding: 0b100101 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b010 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VMUL_VX {
             encoding: 0b100101 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
@@ -697,7 +1073,7 @@ InstructionSet RV32V extends Zicsr {
 
         VWADD_VV {
             encoding: 0b110001 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b010 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -717,7 +1093,7 @@ InstructionSet RV32V extends Zicsr {
 
         VWADD_VX {
             encoding: 0b110001 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -737,7 +1113,7 @@ InstructionSet RV32V extends Zicsr {
 
         VWMACC_VV {
             encoding: 0b111101 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b010 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
@@ -745,7 +1121,7 @@ InstructionSet RV32V extends Zicsr {
 
         VWMACC_VX {
             encoding: 0b111101 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
@@ -753,7 +1129,7 @@ InstructionSet RV32V extends Zicsr {
 
         VWSUBU_VV {
             encoding: 0b110010 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -773,7 +1149,7 @@ InstructionSet RV32V extends Zicsr {
 
         VWSUBU_VX {
             encoding: 0b110010 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -793,7 +1169,7 @@ InstructionSet RV32V extends Zicsr {
 
         VWSUB_VV {
             encoding: 0b110011 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b010 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -813,7 +1189,7 @@ InstructionSet RV32V extends Zicsr {
 
         VWSUB_VX {
             encoding: 0b110011 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -833,7 +1209,7 @@ InstructionSet RV32V extends Zicsr {
 
         VWADDU_W_VV {
             encoding: 0b110100 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -853,7 +1229,7 @@ InstructionSet RV32V extends Zicsr {
 
         VWADDU_W_VX {
             encoding: 0b110100 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -873,7 +1249,7 @@ InstructionSet RV32V extends Zicsr {
 
         VWADD_W_VV {
             encoding: 0b110101 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -893,7 +1269,7 @@ InstructionSet RV32V extends Zicsr {
 
         VWADD_W_VX {
             encoding: 0b110101 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -913,7 +1289,7 @@ InstructionSet RV32V extends Zicsr {
 
         VWSUBU_W_VV {
             encoding: 0b110110 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -933,7 +1309,7 @@ InstructionSet RV32V extends Zicsr {
 
         VWSUBU_W_VX {
             encoding: 0b110110 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -953,7 +1329,7 @@ InstructionSet RV32V extends Zicsr {
 
         VWSUB_W_VV {
             encoding: 0b110111 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -973,7 +1349,7 @@ InstructionSet RV32V extends Zicsr {
 
         VWSUB_W_VX {
             encoding: 0b110111 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -993,7 +1369,7 @@ InstructionSet RV32V extends Zicsr {
 
         VAND_VV {
             encoding: 0b001001 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1013,7 +1389,7 @@ InstructionSet RV32V extends Zicsr {
 
         VAND_VI {
             encoding: 0b001001 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1033,7 +1409,7 @@ InstructionSet RV32V extends Zicsr {
 
         VAND_VX {
             encoding: 0b001001 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1053,7 +1429,7 @@ InstructionSet RV32V extends Zicsr {
 
         VOR_VV {
             encoding: 0b001010 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1073,7 +1449,7 @@ InstructionSet RV32V extends Zicsr {
 
         VOR_VI {
             encoding: 0b001010 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1093,7 +1469,7 @@ InstructionSet RV32V extends Zicsr {
 
         VOR_VX {
             encoding: 0b001010 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1110,33 +1486,9 @@ InstructionSet RV32V extends Zicsr {
                 }
             }
         }
-        VRGATHER_VV {
-            encoding: 0b001100 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
-            behavior: {
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-            }
-        }
-
-        VRGATHER_VI {
-            encoding: 0b001100 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
-            behavior: {
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-            }
-        }
-
-        VRGATHER_VX {
-            encoding: 0b001100 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
-            behavior: {
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-            }
-        }
-
         VXOR_VV {
             encoding: 0b001011 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1156,7 +1508,7 @@ InstructionSet RV32V extends Zicsr {
 
         VXOR_VI {
             encoding: 0b001011 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1176,7 +1528,7 @@ InstructionSet RV32V extends Zicsr {
 
         VXOR_VX {
             encoding: 0b001011 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1196,7 +1548,7 @@ InstructionSet RV32V extends Zicsr {
 
         VSLL_VV {
             encoding: 0b100101 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1216,7 +1568,7 @@ InstructionSet RV32V extends Zicsr {
 
         VSLL_VI {
             encoding: 0b100101 :: vm[0:0] :: vs2[4:0] :: uimm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1236,7 +1588,7 @@ InstructionSet RV32V extends Zicsr {
 
         VSLL_VX {
             encoding: 0b100101 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1256,7 +1608,7 @@ InstructionSet RV32V extends Zicsr {
 
         VSRL_VV {
             encoding: 0b101000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1276,7 +1628,7 @@ InstructionSet RV32V extends Zicsr {
 
         VSRL_VI {
             encoding: 0b101000 :: vm[0:0] :: vs2[4:0] :: uimm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1296,7 +1648,7 @@ InstructionSet RV32V extends Zicsr {
 
         VSRL_VX {
             encoding: 0b101000 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1316,7 +1668,7 @@ InstructionSet RV32V extends Zicsr {
 
         VSRA_VV {
             encoding: 0b101001 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1336,7 +1688,7 @@ InstructionSet RV32V extends Zicsr {
 
         VSRA_VI {
             encoding: 0b101001 :: vm[0:0] :: vs2[4:0] :: uimm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1356,7 +1708,7 @@ InstructionSet RV32V extends Zicsr {
 
         VSRA_VX {
             encoding: 0b101001 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1376,7 +1728,7 @@ InstructionSet RV32V extends Zicsr {
 
         VMSEQ_VV {
             encoding: 0b011000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1396,7 +1748,7 @@ InstructionSet RV32V extends Zicsr {
 
         VMSSEQ_VI {
             encoding: 0b011000 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1416,7 +1768,7 @@ InstructionSet RV32V extends Zicsr {
 
         VMSEQ_VX {
             encoding: 0b011000 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1436,7 +1788,7 @@ InstructionSet RV32V extends Zicsr {
 
         VMSNE_VV {
             encoding: 0b011001 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1456,7 +1808,7 @@ InstructionSet RV32V extends Zicsr {
 
         VMSNE_VI {
             encoding: 0b011001 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1476,7 +1828,7 @@ InstructionSet RV32V extends Zicsr {
 
         VMSNE_VX {
             encoding: 0b011001 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1496,7 +1848,7 @@ InstructionSet RV32V extends Zicsr {
 
         VMSLTU_VV {
             encoding: 0b011010 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1516,7 +1868,7 @@ InstructionSet RV32V extends Zicsr {
 
         VMSLTU_VX {
             encoding: 0b011010 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1536,7 +1888,7 @@ InstructionSet RV32V extends Zicsr {
 
         VMSLT_VV {
             encoding: 0b011011 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1556,7 +1908,7 @@ InstructionSet RV32V extends Zicsr {
 
         VMSLT_VX {
             encoding: 0b011011 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1576,7 +1928,7 @@ InstructionSet RV32V extends Zicsr {
 
         VMSLEU_VV {
             encoding: 0b011100 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1596,7 +1948,7 @@ InstructionSet RV32V extends Zicsr {
 
         VMSLEU_VI {
             encoding: 0b011100 :: vm[0:0] :: vs2[4:0] :: uimm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(uimm5)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(uimm5)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1616,7 +1968,7 @@ InstructionSet RV32V extends Zicsr {
 
         VMSLEU_VX {
             encoding: 0b011100 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1636,7 +1988,7 @@ InstructionSet RV32V extends Zicsr {
 
         VMSLE_VV {
             encoding: 0b011101 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1656,7 +2008,7 @@ InstructionSet RV32V extends Zicsr {
 
         VMSLE_VI {
             encoding: 0b011101 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1676,7 +2028,7 @@ InstructionSet RV32V extends Zicsr {
 
         VMSLE_VX {
             encoding: 0b011101 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1697,7 +2049,7 @@ InstructionSet RV32V extends Zicsr {
         // No need to implement pseudoinstructions?
         // VMSGTU_VV {
         //    encoding: 0b011110 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-        //    args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+        //    assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
         //    behavior: {
         //
         //        unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1717,7 +2069,7 @@ InstructionSet RV32V extends Zicsr {
 
         VMSGTU_VX {
             encoding: 0b011110 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1736,7 +2088,7 @@ InstructionSet RV32V extends Zicsr {
         }
         VMSGTU_VI {
             encoding: 0b011110 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
@@ -1745,7 +2097,7 @@ InstructionSet RV32V extends Zicsr {
         // No need to implement pseudoinstructions?
         // VMSGT_VV {
         //     encoding: 0b011111 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-        //     args_disass:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+        //     assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
         //     behavior: {
         //
         //         unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1765,7 +2117,7 @@ InstructionSet RV32V extends Zicsr {
 
         VMSGT_VX {
             encoding: 0b011111 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1782,10 +2134,28 @@ InstructionSet RV32V extends Zicsr {
                 }
             }
         }
+        VMV_V_X {
+            encoding: 0b010111 :: 0b1 :: 0b00000 :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            assembly:"{name(vd)}, {name(rs1)}";
+            behavior: {
 
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmv_vx(V, X, _vtype, vd, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
         VMV_V_V {
           encoding: 0b010111 :: 0b1 :: 0b00000 :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs1)}";
+            assembly:"{name(vd)}, {name(vs1)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1805,7 +2175,7 @@ InstructionSet RV32V extends Zicsr {
 
         VMV_V_I {
             encoding: 0b010111 :: 0b1 :: 0b00000 :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(simm5)}";
+            assembly:"{name(vd)}, {name(simm5)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1822,30 +2192,131 @@ InstructionSet RV32V extends Zicsr {
                 }
             }
         }
-
-        VMV_V_X {
-            encoding: 0b010111 :: 0b1 :: 0b00000 :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}";
+        VZEXT {
+            encoding: 0b010010 :: 0b1 :: vs2[4:0] :: vs1[4:0] :: 0b010 :: rd[4:0] :: 0b1010111;
+            assembly:"{name(rd)}, {name(vs2)}";
             behavior: {
-
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
-
-                unsigned<XLEN> ret = vmv_vx(V, X, _vtype, vd, rs1, _vstart, _vlen, _vl, XLEN);
-                if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
-                    raise(0, 2);
-                } else{
-                    CSR[VSTART_ADDR] = 0;
-                }
             }
         }
 
-         VMV_X_S {
+
+        // -- Vector Fixed-point Arithmetic Instructions
+        // vaadd.vv?
+        // vaadd.vx?
+        // vaaddu.vv?
+        // vaaddu.vx?
+        // vasub.vv?
+        // vasub.vx?
+        // vasubu.vv?
+        // vasubu.vx?
+        // vnclip.wi?
+        // vnclip.wv?
+        // vnclip.wx?
+        // vnclipu.wi?
+        // vnclipu.wv?
+        // vnclipu.wx?
+        // vsadd.vi?
+        // vsadd.vv?
+        // vsadd.vx?
+        // vsaddu.vi?
+        // vsaddu.vv?
+        // vsaddu.vx?
+        // vsmul.vv?
+        // vsmul.vx?
+        // vssra.vi?
+        // vssra.vv?
+        // vssra.vx?
+        // vssrl.vi?
+        // vssrl.vv?
+        // vssrl.vx?
+        // vssub.vv?
+        // vssub.vx?
+        // vssubu.vv?
+        // vssubu.vx?
+        // -- Vector Single-Width Integer Reduction Instructions
+        // vredand.vs?
+        // vredmax.vs?
+        // vredmaxu.vs?
+        // vredmin.vs?
+        // vredminu.vs?
+        // vredor.vs?
+        // vredxor.vs?
+        VREDSUM_VS {
+            encoding: 0b000000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b010 :: vd[4:0] :: 0b1010111;
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        // -- Vector Widening Integer Reduction Instructions
+        // vwredsum.vs?
+        // vwredsumu.vs?
+        // -- Vector Mask Instructions
+        // vcpop.m?
+        // vfirst.m?
+        // viota.m?
+        // vmand.mm?
+        // vmandn.mm?
+        // vmclr.m?
+        // vmmv.m?
+        // vmnand.mm?
+        // vmnor.mm?
+        // vmnot.m?
+        // vmor.mm?
+        // vmorn.mm?
+        // vmset.m?
+        // vmsif.m?
+        // vmsof.m?
+        // vmxnor.mm?
+        // vmxor.mm?
+        VID_V {
+            encoding: 0b010100 :: 0b1 :: vs2[4:0] :: vs1[4:0] :: 0b010 :: rd[4:0] :: 0b1010111;
+            assembly:"{name(rd)}, {name(vs2)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        // -- Vector Permutation Instructions
+        // vmcompress.vm?
+        // vfmv.f.s?
+        // vfmv.s.f?
+        // vmv.x.s?
+        // vrgatherei16.vv?
+        VMVR_V {
+            encoding: 0b100111 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VRGATHER_VV {
+            encoding: 0b001100 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+
+        VRGATHER_VI {
+            encoding: 0b001100 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+
+        VRGATHER_VX {
+            encoding: 0b001100 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VMV_X_S {
             encoding: 0b010000 :: 0b1 :: vs2[4:0] :: 0b00000 :: 0b010 :: rd[4:0] :: 0b1010111;
-            args_disass:"{name(rd)}, {name(vs2)}";
+            assembly:"{name(rd)}, {name(vs2)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1864,10 +2335,9 @@ InstructionSet RV32V extends Zicsr {
                 }
             }
         }
-
         VMV_S_X {
             encoding: 0b010000 :: 0b1 :: 0b00000 :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(rs1)}";
+            assembly:"{name(vd)}, {name(rs1)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1884,26 +2354,9 @@ InstructionSet RV32V extends Zicsr {
                 }
             }
         }
-
-         VZEXT {
-            encoding: 0b010010 :: 0b1 :: vs2[4:0] :: vs1[4:0] :: 0b010 :: rd[4:0] :: 0b1010111;
-            args_disass:"{name(rd)}, {name(vs2)}";
-            behavior: {
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-            }
-        }
-         VID_V {
-            encoding: 0b010100 :: 0b1 :: vs2[4:0] :: vs1[4:0] :: 0b010 :: rd[4:0] :: 0b1010111;
-            args_disass:"{name(rd)}, {name(vs2)}";
-            behavior: {
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-            }
-        }
-        // TODO: vmv.f.s vmv.s.f (requires floating point registers)
-
         VSLIDEUP_VI {
             encoding: 0b001110 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1923,7 +2376,7 @@ InstructionSet RV32V extends Zicsr {
 
         VSLIDEUP_VX {
             encoding: 0b001110 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1945,7 +2398,7 @@ InstructionSet RV32V extends Zicsr {
 
         VSLIDEDOWN_VI {
             encoding: 0b001111 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1965,7 +2418,7 @@ InstructionSet RV32V extends Zicsr {
 
         VSLIDEDOWN_VX {
             encoding: 0b001111 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -1985,7 +2438,7 @@ InstructionSet RV32V extends Zicsr {
 
         VSLIDE1UP_VX {
             encoding: 0b001110 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -2005,7 +2458,7 @@ InstructionSet RV32V extends Zicsr {
 
         VSLIDE1DOWN_VX {
             encoding: 0b001111 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -2022,25 +2475,56 @@ InstructionSet RV32V extends Zicsr {
                 }
             }
         }
-        VFMERGE {
-          encoding: 0b010111 :: 0b0 :: vs2[4:0] :: rs1[4:0] :: 0b101 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs1)}";
-            behavior: {
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-            }
-        }
-        VFMV_V_F {
-          encoding: 0b010111 :: 0b1 :: 0b00000 :: rs1[4:0] :: 0b101 :: vd[4:0] :: 0b1010111;
-            args_disass:"{name(vd)}, {name(vs1)}";
-            behavior: {
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-            }
-        }
+        // -- 2 Sort
+
+
+
+
+
+
+        // TODO: vmv.f.s vmv.s.f (requires floating point registers)
+
 
     }
-}
-
-InsructionSet RV64V extends RV32V{
 
 }
 
+
+InstructionSet RVVBase extends Zicsr {
+
+    architectural_state {
+        unsigned<32> VLEN = 1024;
+        // user-writeable
+        unsigned<32> VSTART_ADDR = 0x008;
+        unsigned<32>& VSTART_CSR = CSR[VSTART_ADDR];
+        unsigned<32> VXSAT_ADDR = 0x009;
+        unsigned<32>& VXSAT_CSR = CSR[VXSAT_ADDR];
+        unsigned<32> VXRM_ADDR = 0x00A;
+        unsigned<32>& VXRM_CSR = CSR[VXRM_ADDR];
+        unsigned<32> VCSR_ADDR = 0x00F;
+        unsigned<32>& VCSR_CSR = CSR[VCSR_ADDR];
+
+        // not user-writable
+        unsigned<32> VL_ADDR = 0xC20;
+        unsigned<32>& VL_CSR = CSR[VL_ADDR];
+        unsigned<32> VTYPE_ADDR = 0xC21;
+        unsigned<32>& VTYPE_CSR = CSR[VTYPE_ADDR];
+
+        // read-only constant csr
+        unsigned<32> VLENB_ADDR = 0xC22;
+        unsigned<32>& VLENB_CSR = CSR[VLENB_ADDR];
+
+        // vector register address space
+        extern unsigned char V[VLEN * 32];
+    }
+    functions {
+        extern unsigned<8> vtype_extractSEW(unsigned<16>);
+        extern unsigned<8> vtype_extractLMUL(unsigned<16>);
+        extern unsigned<8> vtype_extractTA(unsigned<16>);
+        extern unsigned<8> vtype_extractMA(unsigned<16>);
+        extern unsigned<16> vcfg_concatEEW(unsigned<8> mew, unsigned<8> width);
+        // bool check_eew() {
+        //     return true;
+        // }
+    }
+}
