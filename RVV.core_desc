@@ -213,14 +213,14 @@ InstructionSet RVZve32f extends RVZve32x {
         // vfwredusum.vs?
         // -- 2 Sort
         VFMERGE {
-          encoding: 0b010111 :: 0b0 :: vs2[4:0] :: rs1[4:0] :: 0b101 :: vd[4:0] :: 0b1010111;
+          encoding: 6'b010111 :: 1'b0 :: vs2[4:0] :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs1)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VFMV_V_F {
-          encoding: 0b010111 :: 0b1 :: 0b00000 :: rs1[4:0] :: 0b101 :: vd[4:0] :: 0b1010111;
+          encoding: 6'b010111 :: 1'b1 :: 5'b00000 :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs1)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
@@ -243,12 +243,12 @@ InstructionSet RVZve64x extends RVZve32x {
         // -- 2 Sort
         // Unitstride, 64 bit element
         VLE64_U {
-            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b111 :: vd[4:0] :: 0b0000111;
+            encoding: 3'b000 :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _eew = vcfg_concatEEW(0b0, 0b111);
+                unsigned<XLEN> _eew = vcfg_concatEEW(1'b0, 3'b111);
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
                 unsigned<XLEN> _vl = CSR[VL_ADDR];
                 unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
@@ -263,21 +263,21 @@ InstructionSet RVZve64x extends RVZve32x {
             }
         }
         VLE64_S {
-            encoding: 0b000 :: 0b0 :: 0b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 0b111 :: vd[4:0] :: 0b0000111;
+            encoding: 3'b000 :: 1'b0 :: 2'b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VLE64FF_U {
-            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b10000 :: rs1[4:0] :: 0b111 :: vd[4:0] :: 0b0000111;
+            encoding: 3'b000 :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b10000 :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VLSEGE64 {
-            encoding: nf[2:0] :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b111 :: vd[4:0] :: 0b0000111;
+            encoding: nf[2:0] :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b111 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
@@ -285,12 +285,12 @@ InstructionSet RVZve64x extends RVZve32x {
         }
         // Unitstride, 64 bit element
         VSE64_U {
-            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b111 :: vs3[4:0] :: 0b0100111;
+            encoding: 3'b000 :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b111 :: vs3[4:0] :: 7'b0100111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _eew = vcfg_concatEEW(0b0, 0b111);
+                unsigned<XLEN> _eew = vcfg_concatEEW(1'b0, 3'b111);
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
                 unsigned<XLEN> _vl = CSR[VL_ADDR];
                 unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
@@ -305,7 +305,7 @@ InstructionSet RVZve64x extends RVZve32x {
             }
         }
         VSE64_S {
-            encoding: 0b000 :: 0b0 :: 0b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 0b111 :: vs3[4:0] :: 0b0100111;
+            encoding: 3'b000 :: 1'b0 :: 2'b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 3'b111 :: vs3[4:0] :: 7'b0100111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
@@ -395,7 +395,7 @@ InstructionSet RVZve32x extends RVVBase {
     instructions {
         // -- Configuration-Setting Instructions
         VSETVLI {
-            encoding: 0b0 :: zimm[10:0] :: rs1[4:0] :: 0b111 :: rd[4:0] :: 0b1010111;
+            encoding: 1'b0 :: zimm[10:0] :: rs1[4:0] :: 3'b111 :: rd[4:0] :: 7'b1010111;
             assembly:"{name(rd)}, {name(rs1)}, {zimm}";
             behavior: {
                 if(!(CSR[CSR_MSTATUS] & MSTATUS_VS)){
@@ -460,14 +460,14 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VSETIVLI {
-            encoding: 0b0 :: 0b0 :: zimm[9:0] :: uimm[4:0] :: 0b111 :: rd[4:0] :: 0b1010111;
+            encoding: 1'b0 :: 1'b0 :: zimm[9:0] :: uimm[4:0] :: 3'b111 :: rd[4:0] :: 7'b1010111;
             assembly:"{name(rd)}, {name(rs1)}, {zimm}";
             behavior: {
                 unsigned<32> _vlmax = 0;
             }
         }
         VSETVL {
-            encoding: 0b1 :: 0b000000 :: rs2[4:0] :: rs1[4:0] :: 0b111 :: rd[4:0] :: 0b1010111;
+            encoding: 1'b1 :: 6'b000000 :: rs2[4:0] :: rs1[4:0] :: 3'b111 :: rd[4:0] :: 7'b1010111;
             assembly:"{name(rd)}, {name(rs1)}, {name(rs2)}";
             behavior: {
 
@@ -550,7 +550,7 @@ InstructionSet RVZve32x extends RVVBase {
         // vs[1,2,4,8]r.v?
         // This conflicts with the FLW/FSW encoding of the RV32F instruction set
         // VLE_U {
-        //     encoding: 0b000 :: mew[0:0] :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: width[2:0] :: vd[4:0] :: 0b0000111;
+        //     encoding: 3'b000 :: mew[0:0] :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: width[2:0] :: vd[4:0] :: 7'b0000111;
         //     assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
         //     behavior: {
 
@@ -571,12 +571,12 @@ InstructionSet RVZve32x extends RVVBase {
         // }
         // Unitstride, 8 bit element
         VLE8_U {
-            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b000 :: vd[4:0] :: 0b0000111;
+            encoding: 3'b000 :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _eew = vcfg_concatEEW(0b0, 0b000);
+                unsigned<XLEN> _eew = vcfg_concatEEW(1'b0, 3'b000);
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
                 unsigned<XLEN> _vl = CSR[VL_ADDR];
                 unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
@@ -592,12 +592,12 @@ InstructionSet RVZve32x extends RVVBase {
         }
         // Unitstride, 16 bit element
         VLE16_U {
-            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b101 :: vd[4:0] :: 0b0000111;
+            encoding: 3'b000 :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _eew = vcfg_concatEEW(0b0, 0b101);
+                unsigned<XLEN> _eew = vcfg_concatEEW(1'b0, 3'b101);
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
                 unsigned<XLEN> _vl = CSR[VL_ADDR];
                 unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
@@ -613,12 +613,12 @@ InstructionSet RVZve32x extends RVVBase {
         }
         // Unitstride, 32 bit element
         VLE32_U {
-            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b0000111;
+            encoding: 3'b000 :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _eew = vcfg_concatEEW(0b0, 0b110);
+                unsigned<XLEN> _eew = vcfg_concatEEW(1'b0, 3'b110);
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
                 unsigned<XLEN> _vl = CSR[VL_ADDR];
                 unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
@@ -634,49 +634,49 @@ InstructionSet RVZve32x extends RVVBase {
         }
         // Strided, 8 bit element
         VLE8_S {
-            encoding: 0b000 :: 0b0 :: 0b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 0b000 :: vd[4:0] :: 0b0000111;
+            encoding: 3'b000 :: 1'b0 :: 2'b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VLE16_S {
-            encoding: 0b000 :: 0b0 :: 0b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 0b101 :: vd[4:0] :: 0b0000111;
+            encoding: 3'b000 :: 1'b0 :: 2'b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VLE32_S {
-            encoding: 0b000 :: 0b0 :: 0b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b0000111;
+            encoding: 3'b000 :: 1'b0 :: 2'b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VLE8FF_U {
-            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b10000 :: rs1[4:0] :: 0b000 :: vd[4:0] :: 0b0000111;
+            encoding: 3'b000 :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b10000 :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VLE16FF_U {
-            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b10000 :: rs1[4:0] :: 0b101 :: vd[4:0] :: 0b0000111;
+            encoding: 3'b000 :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b10000 :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VLE32FF_U {
-            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b10000 :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b0000111;
+            encoding: 3'b000 :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b10000 :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VLM_V {
-            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b01011 :: rs1[4:0] :: 0b000 :: vd[4:0] :: 0b0000111;
+            encoding: 3'b000 :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b01011 :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
@@ -684,28 +684,28 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VLR_V {
-            encoding: nf[2:0] :: 0b0 :: 0b00 :: 0b1 :: 0b01000 :: rs1[4:0] :: 0b000 :: vd[4:0] :: 0b0000111;
+            encoding: nf[2:0] :: 1'b0 :: 2'b00 :: 1'b1 :: 5'b01000 :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vs3)}, ({name(rs1)})";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VLSEGE8 {
-            encoding: nf[2:0] :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b000 :: vd[4:0] :: 0b0000111;
+            encoding: nf[2:0] :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VLSEGE16 {
-            encoding: nf[2:0] :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b101 :: vd[4:0] :: 0b0000111;
+            encoding: nf[2:0] :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b101 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VLSEGE32 {
-            encoding: nf[2:0] :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b0000111;
+            encoding: nf[2:0] :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b0000111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
@@ -714,7 +714,7 @@ InstructionSet RVZve32x extends RVVBase {
 
         // This conflicts with the FLW/FSW encoding of the RV32F instruction set
         // VSE_U {
-        //     encoding: 0b000 :: mew[0:0] :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: width[2:0] :: vs3[4:0] :: 0b0100111;
+        //     encoding: 3'b000 :: mew[0:0] :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: width[2:0] :: vs3[4:0] :: 7'b0100111;
         //     assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
         //     behavior: {
 
@@ -735,12 +735,12 @@ InstructionSet RVZve32x extends RVVBase {
         // }
         // Unitstride, 8 bit element
         VSE8_U {
-            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b000 :: vs3[4:0] :: 0b0100111;
+            encoding: 3'b000 :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _eew = vcfg_concatEEW(0b0, 0b000);
+                unsigned<XLEN> _eew = vcfg_concatEEW(1'b0, 3'b000);
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
                 unsigned<XLEN> _vl = CSR[VL_ADDR];
                 unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
@@ -756,12 +756,12 @@ InstructionSet RVZve32x extends RVVBase {
         }
         // Unitstride, 16 bit element
         VSE16_U {
-            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b101 :: vs3[4:0] :: 0b0100111;
+            encoding: 3'b000 :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b101 :: vs3[4:0] :: 7'b0100111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _eew = vcfg_concatEEW(0b0, 0b101);
+                unsigned<XLEN> _eew = vcfg_concatEEW(1'b0, 3'b101);
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
                 unsigned<XLEN> _vl = CSR[VL_ADDR];
                 unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
@@ -777,12 +777,12 @@ InstructionSet RVZve32x extends RVVBase {
         }
         // Unitstride, 32 bit element
         VSE32_U {
-            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b00000 :: rs1[4:0] :: 0b110 :: vs3[4:0] :: 0b0100111;
+            encoding: 3'b000 :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b00000 :: rs1[4:0] :: 3'b110 :: vs3[4:0] :: 7'b0100111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _eew = vcfg_concatEEW(0b0, 0b110);
+                unsigned<XLEN> _eew = vcfg_concatEEW(1'b0, 3'b110);
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
                 unsigned<XLEN> _vl = CSR[VL_ADDR];
                 unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
@@ -798,35 +798,35 @@ InstructionSet RVZve32x extends RVVBase {
         }
         // Strided, 8 bit element
         VSE8_S {
-            encoding: 0b000 :: 0b0 :: 0b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 0b000 :: vs3[4:0] :: 0b0100111;
+            encoding: 3'b000 :: 1'b0 :: 2'b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VSE16_S {
-            encoding: 0b000 :: 0b0 :: 0b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 0b101 :: vs3[4:0] :: 0b0100111;
+            encoding: 3'b000 :: 1'b0 :: 2'b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 3'b101 :: vs3[4:0] :: 7'b0100111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VSE32_S {
-            encoding: 0b000 :: 0b0 :: 0b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 0b110 :: vs3[4:0] :: 0b0100111;
+            encoding: 3'b000 :: 1'b0 :: 2'b10 :: vm[0:0] :: rs2[4:0] :: rs1[4:0] :: 3'b110 :: vs3[4:0] :: 7'b0100111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VSM_V {
-            encoding: 0b000 :: 0b0 :: 0b00 :: vm[0:0] :: 0b01011 :: rs1[4:0] :: 0b000 :: vs3[4:0] :: 0b0100111;
+            encoding: 3'b000 :: 1'b0 :: 2'b00 :: vm[0:0] :: 5'b01011 :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VSR_V {
-            encoding: nf[2:0] :: 0b0 :: 0b00 :: 0b1 :: 0b01000 :: rs1[4:0] :: 0b000 :: vs3[4:0] :: 0b0100111;
+            encoding: nf[2:0] :: 1'b0 :: 2'b00 :: 1'b1 :: 5'b01000 :: rs1[4:0] :: 3'b000 :: vs3[4:0] :: 7'b0100111;
             assembly:"{name(vs3)}, ({name(rs1)})";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
@@ -905,7 +905,7 @@ InstructionSet RVZve32x extends RVVBase {
         // vwmaccu.vv?
         // vwmacc.vx?
         VADD_VV {
-            encoding: 0b000000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b000000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -925,7 +925,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VADD_VI {
-            encoding: 0b000000 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b000000 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -944,7 +944,7 @@ InstructionSet RVZve32x extends RVVBase {
             }
         }
         VADD_VX {
-            encoding: 0b000000 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b000000 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -964,7 +964,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VSUB_VV {
-            encoding: 0b000010 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b000010 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
@@ -984,7 +984,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VSUB_VX {
-            encoding: 0b000010 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b000010 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1003,7 +1003,7 @@ InstructionSet RVZve32x extends RVVBase {
            }
         }
         VWMUL_VV {
-            encoding: 0b111011 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b010 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b111011 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b010 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
@@ -1011,14 +1011,14 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VWMUL_VX {
-            encoding: 0b111011 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b111011 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VWADDU_VV {
-            encoding: 0b110000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b010 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b110000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b010 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
@@ -1038,7 +1038,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VWADDU_VX {
-            encoding: 0b110000 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b110000 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1057,14 +1057,14 @@ InstructionSet RVZve32x extends RVVBase {
             }
         }
         VMUL_VV {
-            encoding: 0b100101 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b010 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b100101 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b010 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VMUL_VX {
-            encoding: 0b100101 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b100101 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
@@ -1072,7 +1072,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VWADD_VV {
-            encoding: 0b110001 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b010 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b110001 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b010 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
@@ -1092,7 +1092,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VWADD_VX {
-            encoding: 0b110001 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b110001 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1112,7 +1112,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VWMACC_VV {
-            encoding: 0b111101 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b010 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b111101 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b010 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
@@ -1120,7 +1120,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VWMACC_VX {
-            encoding: 0b111101 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b111101 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
@@ -1128,7 +1128,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VWSUBU_VV {
-            encoding: 0b110010 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b110010 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
@@ -1148,7 +1148,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VWSUBU_VX {
-            encoding: 0b110010 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b110010 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1168,7 +1168,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VWSUB_VV {
-            encoding: 0b110011 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b010 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b110011 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b010 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
@@ -1188,7 +1188,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VWSUB_VX {
-            encoding: 0b110011 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b110011 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1208,7 +1208,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VWADDU_W_VV {
-            encoding: 0b110100 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b110100 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
@@ -1228,7 +1228,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VWADDU_W_VX {
-            encoding: 0b110100 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b110100 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1248,7 +1248,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VWADD_W_VV {
-            encoding: 0b110101 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b110101 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
@@ -1268,7 +1268,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VWADD_W_VX {
-            encoding: 0b110101 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b110101 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1288,7 +1288,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VWSUBU_W_VV {
-            encoding: 0b110110 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b110110 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
@@ -1308,7 +1308,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VWSUBU_W_VX {
-            encoding: 0b110110 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b110110 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1328,7 +1328,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VWSUB_W_VV {
-            encoding: 0b110111 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b110111 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
@@ -1348,7 +1348,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VWSUB_W_VX {
-            encoding: 0b110111 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b110111 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1368,7 +1368,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VAND_VV {
-            encoding: 0b001001 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b001001 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1388,7 +1388,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VAND_VI {
-            encoding: 0b001001 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b001001 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1408,7 +1408,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VAND_VX {
-            encoding: 0b001001 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b001001 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1428,7 +1428,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VOR_VV {
-            encoding: 0b001010 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b001010 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1448,7 +1448,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VOR_VI {
-            encoding: 0b001010 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b001010 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1468,7 +1468,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VOR_VX {
-            encoding: 0b001010 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b001010 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1487,7 +1487,7 @@ InstructionSet RVZve32x extends RVVBase {
             }
         }
         VXOR_VV {
-            encoding: 0b001011 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b001011 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1507,7 +1507,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VXOR_VI {
-            encoding: 0b001011 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b001011 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1527,7 +1527,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VXOR_VX {
-            encoding: 0b001011 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b001011 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1547,7 +1547,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VSLL_VV {
-            encoding: 0b100101 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b100101 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1567,7 +1567,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VSLL_VI {
-            encoding: 0b100101 :: vm[0:0] :: vs2[4:0] :: uimm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b100101 :: vm[0:0] :: vs2[4:0] :: uimm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1587,7 +1587,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VSLL_VX {
-            encoding: 0b100101 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b100101 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1607,7 +1607,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VSRL_VV {
-            encoding: 0b101000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b101000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1627,7 +1627,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VSRL_VI {
-            encoding: 0b101000 :: vm[0:0] :: vs2[4:0] :: uimm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b101000 :: vm[0:0] :: vs2[4:0] :: uimm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1647,7 +1647,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VSRL_VX {
-            encoding: 0b101000 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b101000 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1667,7 +1667,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VSRA_VV {
-            encoding: 0b101001 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b101001 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1687,7 +1687,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VSRA_VI {
-            encoding: 0b101001 :: vm[0:0] :: vs2[4:0] :: uimm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b101001 :: vm[0:0] :: vs2[4:0] :: uimm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1707,7 +1707,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VSRA_VX {
-            encoding: 0b101001 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b101001 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1727,7 +1727,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VMSEQ_VV {
-            encoding: 0b011000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b011000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
@@ -1747,7 +1747,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VMSSEQ_VI {
-            encoding: 0b011000 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b011000 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
             behavior: {
 
@@ -1767,7 +1767,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VMSEQ_VX {
-            encoding: 0b011000 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b011000 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1787,7 +1787,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VMSNE_VV {
-            encoding: 0b011001 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b011001 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
@@ -1807,7 +1807,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VMSNE_VI {
-            encoding: 0b011001 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b011001 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
             behavior: {
 
@@ -1827,7 +1827,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VMSNE_VX {
-            encoding: 0b011001 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b011001 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1847,7 +1847,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VMSLTU_VV {
-            encoding: 0b011010 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b011010 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
@@ -1867,7 +1867,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VMSLTU_VX {
-            encoding: 0b011010 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b011010 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1887,7 +1887,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VMSLT_VV {
-            encoding: 0b011011 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b011011 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
@@ -1907,7 +1907,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VMSLT_VX {
-            encoding: 0b011011 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b011011 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1927,7 +1927,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VMSLEU_VV {
-            encoding: 0b011100 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b011100 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
@@ -1947,7 +1947,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VMSLEU_VI {
-            encoding: 0b011100 :: vm[0:0] :: vs2[4:0] :: uimm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b011100 :: vm[0:0] :: vs2[4:0] :: uimm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(uimm5)}, {name(vm)}";
             behavior: {
 
@@ -1967,7 +1967,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VMSLEU_VX {
-            encoding: 0b011100 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b011100 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -1987,7 +1987,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VMSLE_VV {
-            encoding: 0b011101 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b011101 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
@@ -2007,7 +2007,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VMSLE_VI {
-            encoding: 0b011101 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b011101 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
             behavior: {
 
@@ -2027,7 +2027,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VMSLE_VX {
-            encoding: 0b011101 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b011101 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -2048,7 +2048,7 @@ InstructionSet RVZve32x extends RVVBase {
 
         // No need to implement pseudoinstructions?
         // VMSGTU_VV {
-        //    encoding: 0b011110 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+        //    encoding: 6'b011110 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
         //    assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
         //    behavior: {
         //
@@ -2068,7 +2068,7 @@ InstructionSet RVZve32x extends RVVBase {
         // }
 
         VMSGTU_VX {
-            encoding: 0b011110 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b011110 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -2087,7 +2087,7 @@ InstructionSet RVZve32x extends RVVBase {
             }
         }
         VMSGTU_VI {
-            encoding: 0b011110 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b011110 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
@@ -2096,7 +2096,7 @@ InstructionSet RVZve32x extends RVVBase {
 
         // No need to implement pseudoinstructions?
         // VMSGT_VV {
-        //     encoding: 0b011111 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+        //     encoding: 6'b011111 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
         //     assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
         //     behavior: {
         //
@@ -2116,7 +2116,7 @@ InstructionSet RVZve32x extends RVVBase {
         // }
 
         VMSGT_VX {
-            encoding: 0b011111 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b011111 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -2135,7 +2135,7 @@ InstructionSet RVZve32x extends RVVBase {
             }
         }
         VMV_V_X {
-            encoding: 0b010111 :: 0b1 :: 0b00000 :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b010111 :: 1'b1 :: 5'b00000 :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}";
             behavior: {
 
@@ -2154,7 +2154,7 @@ InstructionSet RVZve32x extends RVVBase {
             }
         }
         VMV_V_V {
-          encoding: 0b010111 :: 0b1 :: 0b00000 :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+          encoding: 6'b010111 :: 1'b1 :: 5'b00000 :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs1)}";
             behavior: {
 
@@ -2174,7 +2174,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VMV_V_I {
-            encoding: 0b010111 :: 0b1 :: 0b00000 :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b010111 :: 1'b1 :: 5'b00000 :: simm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(simm5)}";
             behavior: {
 
@@ -2193,7 +2193,7 @@ InstructionSet RVZve32x extends RVVBase {
             }
         }
         VZEXT {
-            encoding: 0b010010 :: 0b1 :: vs2[4:0] :: vs1[4:0] :: 0b010 :: rd[4:0] :: 0b1010111;
+            encoding: 6'b010010 :: 1'b1 :: vs2[4:0] :: vs1[4:0] :: 3'b010 :: rd[4:0] :: 7'b1010111;
             assembly:"{name(rd)}, {name(vs2)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
@@ -2243,7 +2243,7 @@ InstructionSet RVZve32x extends RVVBase {
         // vredor.vs?
         // vredxor.vs?
         VREDSUM_VS {
-            encoding: 0b000000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b010 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b000000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b010 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
@@ -2272,7 +2272,7 @@ InstructionSet RVZve32x extends RVVBase {
         // vmxnor.mm?
         // vmxor.mm?
         VID_V {
-            encoding: 0b010100 :: 0b1 :: vs2[4:0] :: vs1[4:0] :: 0b010 :: rd[4:0] :: 0b1010111;
+            encoding: 6'b010100 :: 1'b1 :: vs2[4:0] :: vs1[4:0] :: 3'b010 :: rd[4:0] :: 7'b1010111;
             assembly:"{name(rd)}, {name(vs2)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
@@ -2285,14 +2285,14 @@ InstructionSet RVZve32x extends RVVBase {
         // vmv.x.s?
         // vrgatherei16.vv?
         VMVR_V {
-            encoding: 0b100111 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b100111 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VRGATHER_VV {
-            encoding: 0b001100 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 0b000 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b001100 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
@@ -2300,7 +2300,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VRGATHER_VI {
-            encoding: 0b001100 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b001100 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
@@ -2308,14 +2308,14 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VRGATHER_VX {
-            encoding: 0b001100 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b001100 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
         VMV_X_S {
-            encoding: 0b010000 :: 0b1 :: vs2[4:0] :: 0b00000 :: 0b010 :: rd[4:0] :: 0b1010111;
+            encoding: 6'b010000 :: 1'b1 :: vs2[4:0] :: 5'b00000 :: 3'b010 :: rd[4:0] :: 7'b1010111;
             assembly:"{name(rd)}, {name(vs2)}";
             behavior: {
 
@@ -2336,7 +2336,7 @@ InstructionSet RVZve32x extends RVVBase {
             }
         }
         VMV_S_X {
-            encoding: 0b010000 :: 0b1 :: 0b00000 :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b010000 :: 1'b1 :: 5'b00000 :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}";
             behavior: {
 
@@ -2355,7 +2355,7 @@ InstructionSet RVZve32x extends RVVBase {
             }
         }
         VSLIDEUP_VI {
-            encoding: 0b001110 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b001110 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
             behavior: {
 
@@ -2375,7 +2375,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VSLIDEUP_VX {
-            encoding: 0b001110 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b001110 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -2397,7 +2397,7 @@ InstructionSet RVZve32x extends RVVBase {
         // TODO: vfslide1up vrgatherei16
 
         VSLIDEDOWN_VI {
-            encoding: 0b001111 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 0b011 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b001111 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
             behavior: {
 
@@ -2417,7 +2417,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VSLIDEDOWN_VX {
-            encoding: 0b001111 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b100 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b001111 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -2437,7 +2437,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VSLIDE1UP_VX {
-            encoding: 0b001110 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b001110 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
@@ -2457,7 +2457,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VSLIDE1DOWN_VX {
-            encoding: 0b001111 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 0b110 :: vd[4:0] :: 0b1010111;
+            encoding: 6'b001111 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
