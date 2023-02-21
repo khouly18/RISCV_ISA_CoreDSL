@@ -387,7 +387,7 @@ InstructionSet RV64IC extends RV32IC {
         }
 
         CSUBW {//(RV64/128, RV32 res)
-            encoding: 3'b100 :: 0b1 :: 2'b11:: rd[2:0] :: 2'b00:: rs2[2:0] :: 2'b01;
+            encoding: 3'b100 :: 1'b1 :: 2'b11:: rd[2:0] :: 2'b00:: rs2[2:0] :: 2'b01;
             assembly: "{name(8+rd)}, {name(8+rd)}, {name(8+rs2)}";
             behavior: {
                 unsigned<32> res = (unsigned<32>)X[rd + 8] - (unsigned<32>)X[rs2 + 8];
@@ -396,7 +396,7 @@ InstructionSet RV64IC extends RV32IC {
         }
 
         CADDW {//(RV64/128 RV32 res)
-            encoding: 3'b100 :: 0b1 :: 2'b11:: rd[2:0] :: 2'b01:: rs2[2:0] :: 2'b01;
+            encoding: 3'b100 :: 1'b1 :: 2'b11:: rd[2:0] :: 2'b01:: rs2[2:0] :: 2'b01;
             assembly: "{name(8+rd)}, {name(8+rd)}, {name(8+rs2)}";
             behavior: {
 	            unsigned<32> res = (unsigned<32>)X[rd + 8] + (unsigned<32>)X[rs2 + 8];
@@ -438,21 +438,21 @@ InstructionSet RV64IC extends RV32IC {
 InstructionSet RV128IC extends RV64IC {
     instructions{
         CSRAI64 {//(RV128)
-            encoding: 3'b100 :: 0b0 :: 2'b01:: rs1[2:0] :: 0b0000 :: 2'b01;
+            encoding: 3'b100 :: 1'b0 :: 2'b01:: rs1[2:0] :: 4'b0000 :: 2'b01;
             assembly: "{name(8+rs1)}";
             behavior: {
                 X[rs1 + 8] = (signed<XLEN>)X[rs1 + 8] >> 64;
             }
         }
         CSRLI64 {//(RV128)
-            encoding: 0b1000 :: 2'b00:: rs1[2:0] :: 00000 :: 2'b01;
+            encoding: 4'b1000 :: 2'b00:: rs1[2:0] :: 00000 :: 2'b01;
             assembly: "{name(8+rs1)}";
             behavior: {
                 X[rs1 + 8] = X[rs1 + 8] << 64;
             }
         }
         CSLLI64 {//(RV128)
-            encoding: 3'b000:: 0b0 :: rs1[4:0] :: 0b0000 :: 2'b10;
+            encoding: 3'b000:: 1'b0 :: rs1[4:0] :: 4'b0000 :: 2'b10;
             assembly: "{name(rs1)}";
             behavior: {
                 if(rs1 == 0) raise(0, 2);
