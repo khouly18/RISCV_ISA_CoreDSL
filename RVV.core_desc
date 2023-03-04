@@ -796,11 +796,6 @@ InstructionSet RVZve32x extends RVVBase {
 
         }
         // -- Vector Load and Store Instructions
-        // vlsseg[?]e[8,16,32,64].v?
-        // vsseg[?]e[8,16,32,64].v?
-        // vssseg[?]e[8,16,32,64].v?
-        ////
-        ////
         // VL1R_V -> VL1RE8_V (pseudo)
         // VL2R_V -> VL2RE8_V (pseudo)
         // VL4R_V -> VL4RE8_V (pseudo)
@@ -1945,80 +1940,191 @@ InstructionSet RVZve32x extends RVVBase {
             }
         }
         // -- Vector Integer Arithmetic Instructions
-        // vadc.vim?
-        // vadc.vvm?
-        // vadc.vxm?
-        // vdiv.vv?
-        // vdiv.vx?
-        // vdivu.vv?
-        // vdivu.vx?
-        // vmacc.vv?
-        // vmacc.vx?
-        // vmadc.vi?
-        // vmadc.vim?
-        // vmadc.vv?
-        // vmadc.vvm?
-        // vmadc.vx?
-        // vmadc.vxm?
-        // vmadd.vv?
-        // vmadd.vx?
-        // vmax.vv?
-        // vmax.vx?
-        // vmaxu.vv?
-        // vmaxu.vx?
-        // vmerge.vim?
-        // vmerge.vvm?
-        // vmerge.vxm?
-        // vmin.vv?
-        // vmin.vx?
-        // vminu.vv?
-        // vminu.vx?
-        // vmsbc.vv?
-        // vmsbc.vvm?
-        // vmsbc.vxm?
-        // vmsgtu.vi?
-        // vmul.vv?
-        // vmul.vx?
-        // vmulh.vv?
-        // vmulh.vx?
-        // vmulhsu.vv?
-        // vmulhsu.vx?
-        // vmulhu.vv?
-        // vmulhu.vx?
-        // vnmsac.vv?
-        // vnmsac.vx?
-        // vnmsub.vv?
-        // vnmsub.vx?
-        // vnsra.wi?
-        // vnsra.wv?
-        // vnsra.wx?
-        // vnsrl.wi?
-        // vnsrl.wv?
-        // vnsrl.wx?
-        // vrem.vv?
-        // vrem.vx?
-        // vremu.vv?
-        // vremu.vx?
-        // vrsub.vi?
-        // vrsub.vx?
+        // == Vector Integer Subtract-with-Borrow Instructions
+        // Produce difference with borrow
+        // funct6=010010
         // vsbc.vvm?
+        // funct3=OPIVV
         // vsbc.vxm?
-        // vsext.vf2?
-        // vsext.vf4?
-        // vsext.vf8?
-        // vwadd.wv?
-        // vwadd.wx?
-        // vwaddu.wv?
-        // vwaddu.wx?
-        // vwmacc.vv?
-        // vwmaccsu.vv?
-        // vwmaccsu.vx?
-        // vwmaccu.vx?
-        // vwmaccu.vv?
-        // vwmacc.vx?
+        // funct3=OPIVX
+        // Subtract-with-Borrow Instructions
+        // Produce borrow out in mask register format
+        // funct6=010011
+        // vmsbc.vv?
+        // funct3=OPIVV
+        // vmsbc.vx?
+        // funct3=OPIVX
+        // vmsbc.vvm??
+        // vmsbc.vxm??
+        ////
+        // == Vector Integer Add-with-Carry
+        // Produce sum with carry
+        // funct6=010000
+        // vadc.vvm?  // vd, vs2, vs1, v0 # Vector-vector // vd[i] = vs2[i] + vs1[i] + v0.mask[i]
+        // funct3=OPIVV
+        // vadc.vxm?  // vd, vs2, rs1, v0 # Vector-scalar // vd[i] = vs2[i] + x[rs1] + v0.mask[i]
+        // funct3=OPIVX
+        // vadc.vim?  // vd, vs2, imm, v0 # Vector-immediate // vd[i] = vs2[i] + imm + v0.mask[i]
+        // funct3=OPIVI
+        // Produce carry out in mask register format
+        // funct6=010001
+        // vmadc.vvm?  // vd, vs2, vs1, v0 # Vector-vector // vd.mask[i] = carry_out(vs2[i] + vs1[i] + v0.mask[i])
+        // vmadc.vxm?  // vd, vs2, rs1, v0 # Vector-scalar // vd.mask[i] = carry_out(vs2[i] + x[rs1] + v0.mask[i])
+        // vmadc.vim?  // vd, vs2, imm, v0 # Vector-immediate // vd.mask[i] = carry_out(vs2[i] + imm + v0.mask[i])
+        // vmadc.vv?  // vd, vs2, vs1 # Vector-vector, no carry-in // vd.mask[i] = carry_out(vs2[i] + vs1[i])
+        // funct3=OPIVV
+        // vmadc.vx?  // vd, vs2, rs1 # Vector-scalar, no carry-in // vd.mask[i] = carry_out(vs2[i] + x[rs1])
+        // funct3=OPIVX
+        // vmadc.vi?  // vd, vs2, imm # Vector-immediate, no carry-in // vd.mask[i] = carry_out(vs2[i] + imm)
+        // funct3=OPIVI
+        ////
+        // == Vector Integer Divide Instructions
+        // Signed divide
+        // funct6=100001
+        // vdiv.vv?  // vd, vs2, vs1, vm # Vector-vector
+        // funct3=OPMVV
+        // vdiv.vx?  // vd, vs2, rs1, vm # vector-scalar
+        // funct3=OPMVX
+        // Unsigned divide
+        // funct6=100000
+        // vdivu.vv?  // vd, vs2, vs1, vm # Vector-vector
+        // vdivu.vx?  // vd, vs2, rs1, vm # vector-scalar
+        // Signed remainder
+        // funct6=100011
+        // vrem.vv?  // vd, vs2, vs1, vm # Vector-vector
+        // funct3=OPMVV
+        // vrem.vx?  // vd, vs2, rs1, vm # vector-scalar
+        // funct3=OPMVX
+        // Unsigned remainder
+        // funct6=100010
+        // vremu.vv?  // vd, vs2, vs1, vm # Vector-vector
+        // funct3=OPMVV
+        // vremu.vx?  // vd, vs2, rs1, vm # vector-scalar
+        // funct3=OPMVX
+        ////
+        // == Vector Single-Width Integer Multiply-Add Instructions
+        // Integer multiply-add, overwrite addend
+        // funct6=101101
+        // vmacc.vv?  // vd, vs1, vs2, vm # vd[i] = +(vs1[i] * vs2[i]) + vd[i]
+        // funct3=OPMVV
+        // vmacc.vx?  // vd, rs1, vs2, vm # vd[i] = +(x[rs1] * vs2[i]) + vd[i]
+        // funct3=OPMVX
+        // Integer multiply-sub, overwrite minuend
+        // funct6=101111
+        // vnmsac.vv?  // vd, vs1, vs2, vm # vd[i] = -(vs1[i] * vs2[i]) + vd[i]
+        // funct3=OPMVV
+        // vnmsac.vx?  // vd, rs1, vs2, vm # vd[i] = -(x[rs1] * vs2[i]) + vd[i]
+        // funct3=OPMVX
+        // Integer multiply-add, overwrite multiplicand
+        // funct6=101001
+        // vmadd.vv?  // vd, vs1, vs2, vm # vd[i] = (vs1[i] * vd[i]) + vs2[i]
+        // vmadd.vx?  // vd, rs1, vs2, vm # vd[i] = (x[rs1] * vd[i]) + vs2[i]
+        // Integer multiply-sub, overwrite multiplicand
+        // funct6=101011
+        // vnmsub.vv?  // vd, vs1, vs2, vm # vd[i] = -(vs1[i] * vd[i]) + vs2[i]
+        // funct3=OPMVV
+        // vnmsub.vx?  // vd, rs1, vs2, vm # vd[i] = -(x[rs1] * vd[i]) + vs2[i]
+        // funct3=OPMVX
+        ////
+        // == Vector Integer Min/Max Instructions
+        // Unsigned minimum
+        // funct6=000100
+        // vminu.vv?  // vd, vs2, vs1, vm # Vector-vector
+        // funct3=OPIVV
+        // vminu.vx?  // vd, vs2, rs1, vm # vector-scalar
+        // funct3=OPIVX
+        // Signed minimum
+        // funct6=000101
+        // vmin.vv?  // vd, vs2, vs1, vm # Vector-vector
+        // funct3=OPIVV
+        // vmin.vx?  // vd, vs2, rs1, vm # vector-scalar
+        // funct3=OPIVX
+        // Unsigned maximum
+        // funct6=000110
+        // vmaxu.vv?  // vd, vs2, vs1, vm # Vector-vector
+        // funct3=OPIVV
+        // vmaxu.vx?  // vd, vs2, rs1, vm # vector-scalar
+        // funct3=OPIVX
+        // Signed maximum
+        // funct6=000111
+        // vmax.vv?  // vd, vs2, vs1, vm # Vector-vector
+        // funct3=OPIVV
+        // vmax.vx?  // vd, vs2, rs1, vm # vector-scalar
+        // funct3=OPIVX
+        ////
+        // == Vector Integer Merge Instructions
+        // funct6=010111
+        // vmerge.vvm?  // vd, vs2, vs1, v0 # vd[i] = v0.mask[i] ? vs1[i] : vs2[i]
+        // funct3=OPIVV
+        // vmerge.vxm?  // vd, vs2, rs1, v0 # vd[i] = v0.mask[i] ? x[rs1] : vs2[i]
+        // funct3=OPIVX
+        // vmerge.vim?  // vd, vs2, imm, v0 # vd[i] = v0.mask[i] ? imm : vs2[i]
+        // funct3=OPIVI
+        ////
+        // == Vector Single-Width Integer Multiply Instructions
+        // Signed multiply, returning low bits of product
+        VMUL_VV {
+            // vector-vector
+            encoding: 6'b100101 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b010 :: vd[4:0] :: 7'b1010111;
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VMUL_VX {
+            // vector-scalar
+            encoding: 6'b100101 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b1010111;
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        ////
+
+
+        // Signed multiply, returning high bits of product
+        // funct6=100111
+        // vmulh.vv?  // vd, vs2, vs1, vm # Vector-vector
+        // funct3=OPMVV
+        // vmulh.vx?  // vd, vs2, rs1, vm # vector-scalar
+        // funct3=OPMVX
+        // Unsigned multiply, returning high bits of product
+        // funct6=100100
+        // vmulhu.vv?  // vd, vs2, vs1, vm # Vector-vector
+        // funct3=OPMVV
+        // vmulhu.vx?  // vd, vs2, rs1, vm # vector-scalar
+        // funct3=OPMVX
+        // Signed(vs2)-Unsigned multiply, returning high bits of product
+        // funct6=100110
+        // vmulhsu.vv?  // vd, vs2, vs1, vm # Vector-vector
+        // funct3=OPMVV
+        // vmulhsu.vx?  // vd, vs2, rs1, vm # vector-scalar
+        // funct3=OPMVX
+        ////
+        // Vector Narrowing Integer Right Shift Instructions
+        // Narrowing shift right logical, SEW = (2*SEW) >> SEW
+        // funct6=101100
+        // vnsrl.wv?  // vd, vs2, vs1, vm # vector-vector
+        // funct3=OPIVV
+        // vnsrl.wx?  // vd, vs2, rs1, vm # vector-scalar
+        // funct3=OPIVX
+        // vnsrl.wi?  // vd, vs2, uimm, vm # vector-immediate
+        // funct3=OPIVI
+        // Narrowing shift right arithmetic, SEW = (2*SEW) >> SEW
+        // funct6=101101
+        // vnsra.wv?  // vd, vs2, vs1, vm # vector-vector
+        // funct3=OPIVV
+        // vnsra.wx?  // vd, vs2, rs1, vm # vector-scalar
+        // funct3=OPIVX
+        // vnsra.wi?  // vd, vs2, uimm, vm # vector-immediate
+        // funct3=OPIVI
+        ////
+        // = Vector Single-Width Integer Add and Subtract
+        // Integer adds
         VADD_VV {
+            // Vector-vector
             encoding: 6'b000000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
-            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -2035,29 +2141,10 @@ InstructionSet RVZve32x extends RVVBase {
                 }
             }
         }
-
-        VADD_VI {
-            encoding: 6'b000000 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
-            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
-            behavior: {
-
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
-
-                unsigned<XLEN> ret = vadd_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
-                if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
-                    raise(0, 2);
-                } else{
-                    CSR[VSTART_ADDR] = 0;
-                }
-            }
-        }
         VADD_VX {
+            // vector-scalar
             encoding: 6'b000000 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
-            assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
                 unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
@@ -2074,8 +2161,29 @@ InstructionSet RVZve32x extends RVVBase {
                 }
             }
         }
+        VADD_VI {
+            // vector-immediate
+            encoding: 6'b000000 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
+            assembly:"{name(vd)}, {name(vs1)}, {imm}, {name(vm)}";
+            behavior: {
 
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vadd_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+        // Integer subtract
         VSUB_VV {
+            // Vector-vector
             encoding: 6'b000010 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
@@ -2096,6 +2204,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VSUB_VX {
+            // Vector-scalar
             encoding: 6'b000010 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
@@ -2114,22 +2223,67 @@ InstructionSet RVZve32x extends RVVBase {
                }
            }
         }
-        VWMUL_VV {
-            encoding: 6'b111011 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b010 :: vd[4:0] :: 7'b1010111;
-            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+        // Integer reverse subtract
+        // funct6=000011
+        // vrsub.vi?
+        // funct3=OPIVX
+        // vrsub.vx?
+        // funct3=OPIVI
+        ////
+        // Vector Integer Extension
+        VZEXT_VF2 {
+            // Zero-extend SEW/2 source to SEW destination
+            encoding: 6'b010010 :: vm[0:0] :: vs2[4:0] :: 5'b00110 :: 3'b010 :: rd[4:0] :: 7'b1010111;
+            assembly:"{name(vd)}, {name(vs2)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
-
-        VWMUL_VX {
-            encoding: 6'b111011 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
-            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+        VSEXT_VF2 {
+            // Sign-extend SEW/2 source to SEW destination
+            encoding: 6'b010010 :: vm[0:0] :: vs2[4:0] :: 5'b00111 :: 3'b010 :: rd[4:0] :: 7'b1010111;
+            assembly:"{name(vd)}, {name(vs2)}, {name(vm)}";
             behavior: {
                 unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
+        VZEXT_VF4 {
+            // Zero-extend SEW/4 source to SEW destination
+            encoding: 6'b010010 :: vm[0:0] :: vs2[4:0] :: 5'b00100 :: 3'b010 :: rd[4:0] :: 7'b1010111;
+            assembly:"{name(vd)}, {name(vs2)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSEXT_VF4 {
+            // Sign-extend SEW/4 source to SEW destination
+            encoding: 6'b010010 :: vm[0:0] :: vs2[4:0] :: 5'b00101 :: 3'b010 :: rd[4:0] :: 7'b1010111;
+            assembly:"{name(vd)}, {name(vs2)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VZEXT_VF8 {
+            // Zero-extend SEW/8 source to SEW destination
+            encoding: 6'b010010 :: vm[0:0] :: vs2[4:0] :: 5'b00100 :: 3'b010 :: rd[4:0] :: 7'b1010111;
+            assembly:"{name(vd)}, {name(vs2)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        VSEXT_VF8 {
+            // Sign-extend SEW/8 source to SEW destination
+            encoding: 6'b010010 :: vm[0:0] :: vs2[4:0] :: 5'b00011 :: 3'b010 :: rd[4:0] :: 7'b1010111;
+            assembly:"{name(vd)}, {name(vs2)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        ////
+        // == Vector Widening Integer Add/Subtract
+        // Widening unsigned integer add/subtract, 2*SEW = SEW +/- SEW
         VWADDU_VV {
+            // vector-vector
             encoding: 6'b110000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b010 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
@@ -2150,6 +2304,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VWADDU_VX {
+            // vector-scalar
             encoding: 6'b110000 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
@@ -2168,78 +2323,8 @@ InstructionSet RVZve32x extends RVVBase {
                 }
             }
         }
-        VMUL_VV {
-            encoding: 6'b100101 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b010 :: vd[4:0] :: 7'b1010111;
-            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
-            behavior: {
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-            }
-        }
-        VMUL_VX {
-            encoding: 6'b100101 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b1010111;
-            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
-            behavior: {
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-            }
-        }
-
-        VWADD_VV {
-            encoding: 6'b110001 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b010 :: vd[4:0] :: 7'b1010111;
-            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
-            behavior: {
-
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
-
-                unsigned<XLEN> ret = vwadd_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
-                if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
-                    raise(0, 2);
-                } else{
-                    CSR[VSTART_ADDR] = 0;
-                }
-            }
-        }
-
-        VWADD_VX {
-            encoding: 6'b110001 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b1010111;
-            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
-            behavior: {
-
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
-
-                unsigned<XLEN> ret = vwadd_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
-                if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
-                    raise(0, 2);
-                } else{
-                    CSR[VSTART_ADDR] = 0;
-                }
-            }
-        }
-
-        VWMACC_VV {
-            encoding: 6'b111101 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b010 :: vd[4:0] :: 7'b1010111;
-            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
-            behavior: {
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-            }
-        }
-
-        VWMACC_VX {
-            encoding: 6'b111101 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
-            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
-            behavior: {
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-            }
-        }
-
         VWSUBU_VV {
+            // vector-vector
             encoding: 6'b110010 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
@@ -2260,6 +2345,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VWSUBU_VX {
+            // vector-scalar
             encoding: 6'b110010 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
@@ -2278,8 +2364,51 @@ InstructionSet RVZve32x extends RVVBase {
                 }
             }
         }
+        // Widening signed integer add/subtract, 2*SEW = SEW +/- SEW
+        VWADD_VV {
+            // vector-vector
+            encoding: 6'b110001 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b010 :: vd[4:0] :: 7'b1010111;
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vwadd_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+
+        VWADD_VX {
+            // vector-scalar
+            encoding: 6'b110001 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b110 :: vd[4:0] :: 7'b1010111;
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vwadd_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
 
         VWSUB_VV {
+            // vector-vector
             encoding: 6'b110011 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b010 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
@@ -2300,6 +2429,7 @@ InstructionSet RVZve32x extends RVVBase {
         }
 
         VWSUB_VX {
+            // vector-scalar
             encoding: 6'b110011 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
@@ -2316,6 +2446,89 @@ InstructionSet RVZve32x extends RVVBase {
                 } else{
                     CSR[VSTART_ADDR] = 0;
                 }
+            }
+        }
+
+        // Widening unsigned integer add/subtract, 2*SEW = 2*SEW +/- SEW
+        // funct6=110100
+        // vwaddu.wv?
+        // vwaddu.wx?
+        // Widening signed integer add/subtract, 2*SEW = 2*SEW +/- SEW
+        // funct6=110101
+        // vwadd.wv?
+        // vwadd.wx?
+        ////
+        // == Vector Widening Integer Multiply-Add Instructions
+        // Widening unsigned-integer multiply-add, overwrite addend
+        // funct6=111100
+        // vwmaccu.vv?  // vd, vs1, vs2, vm # vd[i] = +(vs1[i] * vs2[i]) + vd[i]
+        // funct3=OPMVV
+        // vwmaccu.vx?  // vd, rs1, vs2, vm # vd[i] = +(x[rs1] * vs2[i]) + vd[i]
+        // funct3=OPMVX
+        // Widening signed-integer multiply-add, overwrite addend
+        VWMACC_VV {
+            encoding: 6'b111101 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b010 :: vd[4:0] :: 7'b1010111;
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+
+        VWMACC_VX {
+            encoding: 6'b111101 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        // Widening signed-unsigned-integer multiply-add, overwrite addend
+        // funct6=111111
+        // vwmaccsu.vv?  // vd, vs1, vs2, vm # vd[i] = +(signed(vs1[i]) * unsigned(vs2[i])) + vd[i]
+        // funct3=OPMVV
+        // vwmaccsu.vx?  // vd, rs1, vs2, vm # vd[i] = +(signed(x[rs1]) * unsigned(vs2[i])) + vd[i]
+        // funct3=OPMVX
+        // Widening unsigned-signed-integer multiply-add, overwrite addend
+        // funct6=111110
+        // vwmaccus.vx  // vd, rs1, vs2, vm # vd[i] = +(unsigned(x[rs1]) * signed(vs2[i])) + vd[i]
+        // funct3=OPMVX
+        ////
+        // == Vector Widening Integer Multiply Instructions
+        // Widening signed-integer multiply
+        VWMUL_VV {
+            encoding: 6'b111011 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b010 :: vd[4:0] :: 7'b1010111;
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+
+        VWMUL_VX {
+            encoding: 6'b111011 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+        // Widening unsigned-integer multiply
+        // vwmulu.vv?
+        // vwmulu.vx
+        // Widening signed(vs2)-unsigned integer multiply
+        // vwmulsu.vv?
+        // vwmulsu.vx?
+        ////
+        VWMACC_VV {
+            encoding: 6'b111101 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b010 :: vd[4:0] :: 7'b1010111;
+            assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+            }
+        }
+
+        VWMACC_VX {
+            encoding: 6'b111101 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
+            assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
+            behavior: {
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
             }
         }
 
@@ -2838,6 +3051,9 @@ InstructionSet RVZve32x extends RVVBase {
             }
         }
 
+        ////
+        // == Vector Integer Compare Instructions
+        // Set if equal
         VMSEQ_VV {
             encoding: 6'b011000 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
@@ -2857,27 +3073,6 @@ InstructionSet RVZve32x extends RVVBase {
                 }
             }
         }
-
-        VMSSEQ_VI {
-            encoding: 6'b011000 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
-            assembly:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
-            behavior: {
-
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
-
-                unsigned<XLEN> ret = vmseq_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
-                if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
-                    raise(0, 2);
-                } else{
-                    CSR[VSTART_ADDR] = 0;
-                }
-            }
-        }
-
         VMSEQ_VX {
             encoding: 6'b011000 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
@@ -2897,7 +3092,26 @@ InstructionSet RVZve32x extends RVVBase {
                 }
             }
         }
+        VMSEQ_VI {
+            encoding: 6'b011000 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
+            assembly:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
+            behavior: {
 
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmseq_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+        // Set if not equal
         VMSNE_VV {
             encoding: 6'b011001 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
@@ -2917,27 +3131,6 @@ InstructionSet RVZve32x extends RVVBase {
                 }
             }
         }
-
-        VMSNE_VI {
-            encoding: 6'b011001 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
-            assembly:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
-            behavior: {
-
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
-
-                unsigned<XLEN> ret = vmsne_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
-                if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
-                    raise(0, 2);
-                } else{
-                    CSR[VSTART_ADDR] = 0;
-                }
-            }
-        }
-
         VMSNE_VX {
             encoding: 6'b011001 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
@@ -2957,7 +3150,26 @@ InstructionSet RVZve32x extends RVVBase {
                 }
             }
         }
+        VMSNE_VI {
+            encoding: 6'b011001 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
+            assembly:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
+            behavior: {
 
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmsne_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+        // Set if less than, unsigned
         VMSLTU_VV {
             encoding: 6'b011010 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
@@ -2977,7 +3189,6 @@ InstructionSet RVZve32x extends RVVBase {
                 }
             }
         }
-
         VMSLTU_VX {
             encoding: 6'b011010 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
@@ -2997,7 +3208,7 @@ InstructionSet RVZve32x extends RVVBase {
                 }
             }
         }
-
+        // Set if less than, signed
         VMSLT_VV {
             encoding: 6'b011011 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
@@ -3017,7 +3228,6 @@ InstructionSet RVZve32x extends RVVBase {
                 }
             }
         }
-
         VMSLT_VX {
             encoding: 6'b011011 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
@@ -3037,7 +3247,7 @@ InstructionSet RVZve32x extends RVVBase {
                 }
             }
         }
-
+        // Set if less than or equal, unsigned
         VMSLEU_VV {
             encoding: 6'b011100 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
@@ -3057,27 +3267,6 @@ InstructionSet RVZve32x extends RVVBase {
                 }
             }
         }
-
-        VMSLEU_VI {
-            encoding: 6'b011100 :: vm[0:0] :: vs2[4:0] :: uimm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
-            assembly:"{name(vd)}, {name(vs2)}, {name(uimm5)}, {name(vm)}";
-            behavior: {
-
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
-
-                unsigned<XLEN> ret = vmsleu_vi(V, _vtype, vm, vd, vs2, uimm5, _vstart, _vlen, _vl);
-                if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
-                    raise(0, 2);
-                } else{
-                    CSR[VSTART_ADDR] = 0;
-                }
-            }
-        }
-
         VMSLEU_VX {
             encoding: 6'b011100 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
@@ -3097,7 +3286,26 @@ InstructionSet RVZve32x extends RVVBase {
                 }
             }
         }
+        VMSLEU_VI {
+            encoding: 6'b011100 :: vm[0:0] :: vs2[4:0] :: uimm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
+            assembly:"{name(vd)}, {name(vs2)}, {name(uimm5)}, {name(vm)}";
+            behavior: {
 
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmsleu_vi(V, _vtype, vm, vd, vs2, uimm5, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+        // Set if less than or equal, signed
         VMSLE_VV {
             encoding: 6'b011101 :: vm[0:0] :: vs2[4:0] :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
@@ -3117,27 +3325,6 @@ InstructionSet RVZve32x extends RVVBase {
                 }
             }
         }
-
-        VMSLE_VI {
-            encoding: 6'b011101 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
-            assembly:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
-            behavior: {
-
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
-
-                unsigned<XLEN> ret = vmsle_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
-                if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
-                    raise(0, 2);
-                } else{
-                    CSR[VSTART_ADDR] = 0;
-                }
-            }
-        }
-
         VMSLE_VX {
             encoding: 6'b011101 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
@@ -3149,6 +3336,25 @@ InstructionSet RVZve32x extends RVVBase {
                 unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
 
                 unsigned<XLEN> ret = vmsle_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
+        VMSLE_VI {
+            encoding: 6'b011101 :: vm[0:0] :: vs2[4:0] :: simm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
+            assembly:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmsle_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
                 if(ret != 0){
                     CSR[VSTART_ADDR] = ret >> 8;
                     raise(0, 2);
@@ -3179,6 +3385,7 @@ InstructionSet RVZve32x extends RVVBase {
         //    }
         // }
 
+        // Set if greater than, unsigned
         VMSGTU_VX {
             encoding: 6'b011110 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
@@ -3227,6 +3434,7 @@ InstructionSet RVZve32x extends RVVBase {
         //     }
         // }
 
+        // Set if greater than, signed
         VMSGT_VX {
             encoding: 6'b011111 :: vm[0:0] :: vs2[4:0] :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
@@ -3246,7 +3454,30 @@ InstructionSet RVZve32x extends RVVBase {
                 }
             }
         }
+        ////
+        // == Vector Integer Move Instructions
+        VMV_V_V {
+            // vd[i] = vs1[i]
+            encoding: 6'b010111 :: 1'b1 :: 5'b00000 :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
+            assembly:"{name(vd)}, {name(vs1)}";
+            behavior: {
+
+                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> _vl = CSR[VL_ADDR];
+                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+
+                unsigned<XLEN> ret = vmv_vv(V, _vtype, vd, vs1, _vstart, _vlen, _vl);
+                if(ret != 0){
+                    CSR[VSTART_ADDR] = ret >> 8;
+                    raise(0, 2);
+                } else{
+                    CSR[VSTART_ADDR] = 0;
+                }
+            }
+        }
         VMV_V_X {
+            // vd[i] = x[rs1]
             encoding: 6'b010111 :: 1'b1 :: 5'b00000 :: rs1[4:0] :: 3'b100 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(rs1)}";
             behavior: {
@@ -3265,27 +3496,8 @@ InstructionSet RVZve32x extends RVVBase {
                 }
             }
         }
-        VMV_V_V {
-          encoding: 6'b010111 :: 1'b1 :: 5'b00000 :: vs1[4:0] :: 3'b000 :: vd[4:0] :: 7'b1010111;
-            assembly:"{name(vd)}, {name(vs1)}";
-            behavior: {
-
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
-
-                unsigned<XLEN> ret = vmv_vv(V, _vtype, vd, vs1, _vstart, _vlen, _vl);
-                if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
-                    raise(0, 2);
-                } else{
-                    CSR[VSTART_ADDR] = 0;
-                }
-            }
-        }
-
         VMV_V_I {
+            // vd[i] = imm
             encoding: 6'b010111 :: 1'b1 :: 5'b00000 :: simm5[4:0] :: 3'b011 :: vd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(simm5)}";
             behavior: {
@@ -3304,13 +3516,7 @@ InstructionSet RVZve32x extends RVVBase {
                 }
             }
         }
-        VZEXT {
-            encoding: 6'b010010 :: 1'b1 :: vs2[4:0] :: vs1[4:0] :: 3'b010 :: rd[4:0] :: 7'b1010111;
-            assembly:"{name(rd)}, {name(vs2)}";
-            behavior: {
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-            }
-        }
+        ////
 
 
         // -- Vector Fixed-point Arithmetic Instructions
