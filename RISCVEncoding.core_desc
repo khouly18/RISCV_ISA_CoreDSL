@@ -1,8 +1,10 @@
 InstructionSet RISCVEncoding {
     architectural_state {
+        const int RV_CSR_USTATUS = 0x000;
         const int RV_CSR_FFLAGS = 0x001;
         const int RV_CSR_FRM = 0x002;
         const int RV_CSR_FCSR = 0x003;
+        const int RV_CSR_UIE = 0x004;
         const int RV_CSR_UTVT = 0x007;
         const int RV_CSR_VSTART = 0x008;
         const int RV_CSR_VXSAT = 0x009;
