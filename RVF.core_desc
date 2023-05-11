@@ -9,7 +9,38 @@ InstructionSet RV32F extends Zicsr {
         register unsigned<FLEN> F[32] [[is_float_reg]];
         unsigned<XLEN>& FCSR = CSR[RV_CSR_FCSR];
 
-        unsigned<FLEN>& FZERO = F[0];
+        unsigned<FLEN>& FT0 = F[0];
+        unsigned<FLEN>& FT1 = F[1];
+        unsigned<FLEN>& FT2 = F[2];
+        unsigned<FLEN>& FT3 = F[3];
+        unsigned<FLEN>& FT4 = F[4];
+        unsigned<FLEN>& FT5 = F[5];
+        unsigned<FLEN>& FT6 = F[6];
+        unsigned<FLEN>& FT7 = F[7];
+        unsigned<FLEN>& FS0 = F[8];
+        unsigned<FLEN>& FS1 = F[9];
+        unsigned<FLEN>& FA0 = F[10];
+        unsigned<FLEN>& FA1 = F[11];
+        unsigned<FLEN>& FA2 = F[12];
+        unsigned<FLEN>& FA3 = F[13];
+        unsigned<FLEN>& FA4 = F[14];
+        unsigned<FLEN>& FA5 = F[15];
+        unsigned<FLEN>& FA6 = F[16];
+        unsigned<FLEN>& FA7 = F[17];
+        unsigned<FLEN>& FS2 = F[18];
+        unsigned<FLEN>& FS3 = F[19];
+        unsigned<FLEN>& FS4 = F[20];
+        unsigned<FLEN>& FS5 = F[21];
+        unsigned<FLEN>& FS6 = F[22];
+        unsigned<FLEN>& FS7 = F[23];
+        unsigned<FLEN>& FS8 = F[24];
+        unsigned<FLEN>& FS9 = F[25];
+        unsigned<FLEN>& FS10 = F[26];
+        unsigned<FLEN>& FS11 = F[27];
+        unsigned<FLEN>& FT8 = F[28];
+        unsigned<FLEN>& FT9 = F[29];
+        unsigned<FLEN>& FT10 = F[30];
+        unsigned<FLEN>& FT11 = F[31];
     }
 
     functions {
