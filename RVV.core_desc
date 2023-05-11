@@ -3801,7 +3801,7 @@ InstructionSet RVZve32x extends RVVBase {
 InstructionSet RVVBase extends Zicsr {
 
     architectural_state {
-        unsigned<32> VLEN = 1024;
+        unsigned int VLEN;
         // user-writeable
         unsigned<32>& VSTART = CSR[RV_CSR_VSTART];
         unsigned<32>& VXSAT = CSR[RV_CSR_VXSAT];
@@ -3816,7 +3816,7 @@ InstructionSet RVVBase extends Zicsr {
         unsigned<32>& VLENB = CSR[RV_CSR_VLENB];
 
         // vector register address space
-        extern unsigned char V[VLEN * 32];
+        extern unsigned char V[VLEN / 8 * 32];
     }
     functions {
         extern unsigned<8> vtype_extractSEW(unsigned<16>);
