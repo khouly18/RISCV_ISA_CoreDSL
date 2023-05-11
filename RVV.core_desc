@@ -2237,7 +2237,7 @@ InstructionSet RVZve32x extends RVVBase {
             encoding: 6'b010010 :: vm[0:0] :: vs2[4:0] :: 5'b00110 :: 3'b010 :: rd[4:0] :: 7'b1010111;
             assembly:"{name(vd)}, {name(vs2)}, {name(vm)}";
             behavior: {
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
+                unsigned<XLEN> dummy = 0;
             }
         }
         VSEXT_VF2 {
