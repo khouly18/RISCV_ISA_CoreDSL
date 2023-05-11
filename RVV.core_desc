@@ -486,18 +486,18 @@ InstructionSet RVZve64x extends RVZve32x {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vtype = VTYPE;
                 unsigned<XLEN> _eew = vcfg_concatEEW(1'b0, 3'b111);
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = etiss_vload_encoded_unitstride(V, _vtype, vm, _eew, vd, _vstart, _vlen, _vl, (unsigned<64>)X[rs1]); // V, MEM[-1],
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -549,18 +549,18 @@ InstructionSet RVZve64x extends RVZve32x {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vtype = VTYPE;
                 unsigned<XLEN> _eew = vcfg_concatEEW(1'b0, 3'b111);
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = etiss_vstore_encoded_unitstride(V, _vtype, vm, _eew, vs3, _vstart, _vlen, _vl, (unsigned<64>)X[rs1]); //V, MEM[-1],
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -665,7 +665,7 @@ InstructionSet RVZve32x extends RVVBase {
             encoding: 1'b0 :: zimm[10:0] :: rs1[4:0] :: 3'b111 :: rd[4:0] :: 7'b1010111;
             assembly:"{name(rd)}, {name(rs1)}, {zimm}";
             behavior: {
-                if(!(CSR[CSR_MSTATUS] & MSTATUS_VS)){
+                if(!(CSR[RV_CSR_MSTATUS] & MSTATUS_VS)){
                     raise(0, 2);  // vpu not enabled
                 }
 
@@ -677,7 +677,7 @@ InstructionSet RVZve32x extends RVVBase {
                 unsigned<32> _vlmax = 0;
                 unsigned<32> _illmask = 0;
 
-                unsigned<32> vlen = CSR[VLENB_ADDR]*8;
+                unsigned<32> vlen = VLENB*8;
 
                 if (lmul & 4){
                     _illmask = (1 << (XLEN-1));
@@ -706,7 +706,7 @@ InstructionSet RVZve32x extends RVVBase {
                 }else if(rd != 0){
                     _avl = ~0;
                 }else{
-                    _avl = CSR[VL_ADDR];
+                    _avl = VL;
                 }
 
                 unsigned<32> _vl = 0;
@@ -719,10 +719,10 @@ InstructionSet RVZve32x extends RVVBase {
                    _vl = (_avl % 0x2) ?  _avl/2 + 1 : _avl / 2; // ceil (AVL/2)
                 }
 
-                CSR[VL_ADDR] = _vl;
-                CSR[VTYPE_ADDR] = _illmask | zimm;
+                VL = _vl;
+                VTYPE = _illmask | zimm;
                 if(rd != 0) X[rd] = _vl;
-                CSR[VSTART_ADDR] = 0;
+                VSTART = 0;
             }
         }
 
@@ -747,7 +747,7 @@ InstructionSet RVZve32x extends RVVBase {
                 unsigned<XLEN> _vlmax = 0;
                 unsigned<XLEN> _illmask = 0;
 
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 if (lmul & 4){
                     _illmask = (1 << (XLEN-1));
@@ -776,7 +776,7 @@ InstructionSet RVZve32x extends RVVBase {
                 }else if(rd != 0){
                     _avl = ~0;
                 }else{
-                    _avl = CSR[VL_ADDR];
+                    _avl = VL;
                 }
 
                 unsigned<32> _vl = 0;
@@ -789,10 +789,10 @@ InstructionSet RVZve32x extends RVVBase {
                    _vl = (_avl % 0x2) ? _avl/2 +1 : _avl/2; // ceil (AVL/2)
                 }
 
-                CSR[VL_ADDR] = _vl;
-                CSR[VTYPE_ADDR] = _illmask | zimm;
+                VL = _vl;
+                VTYPE = _illmask | zimm;
                 if(rd != 0) X[rd] = _vl;
-                CSR[VSTART_ADDR] = 0;
+                VSTART = 0;
             }
 
         }
@@ -1591,18 +1591,18 @@ InstructionSet RVZve32x extends RVVBase {
         //     assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
         //     behavior: {
 
-        //         unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+        //         unsigned<XLEN> _vtype = VTYPE;
         //         unsigned<XLEN> _eew = vcfg_concatEEW(mew, width);
-        //         unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-        //         unsigned<XLEN> _vl = CSR[VL_ADDR];
-        //         unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+        //         unsigned<XLEN> _vstart = VSTART;
+        //         unsigned<XLEN> _vl = VL;
+        //         unsigned<XLEN> _vlen = VLENB*8;
 
         //         unsigned<XLEN> ret = etiss_vload_encoded_unitstride(V, _vtype, vm, _eew, vd, _vstart, _vlen, _vl, (unsigned<64>)X[rs1]); // V, MEM[-1],
         //         if(ret != 0){
-        //             CSR[VSTART_ADDR] = ret >> 8;
+        //             VSTART = ret >> 8;
         //             raise(0, 2);
         //         } else{
-        //             CSR[VSTART_ADDR] = 0;
+        //             VSTART = 0;
         //         }
         //     }
         // }
@@ -1612,18 +1612,18 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vtype = VTYPE;
                 unsigned<XLEN> _eew = vcfg_concatEEW(1'b0, 3'b000);
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = etiss_vload_encoded_unitstride(V, _vtype, vm, _eew, vd, _vstart, _vlen, _vl, (unsigned<64>)X[rs1]); // V, MEM[-1],
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -1641,18 +1641,18 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vtype = VTYPE;
                 unsigned<XLEN> _eew = vcfg_concatEEW(1'b0, 3'b101);
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = etiss_vload_encoded_unitstride(V, _vtype, vm, _eew, vd, _vstart, _vlen, _vl, (unsigned<64>)X[rs1]); // V, MEM[-1],
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -1662,18 +1662,18 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vtype = VTYPE;
                 unsigned<XLEN> _eew = vcfg_concatEEW(1'b0, 3'b110);
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = etiss_vload_encoded_unitstride(V, _vtype, vm, _eew, vd, _vstart, _vlen, _vl, (unsigned<64>)X[rs1]); // V, MEM[-1],
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -1826,18 +1826,18 @@ InstructionSet RVZve32x extends RVVBase {
         //     assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
         //     behavior: {
 
-        //         unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+        //         unsigned<XLEN> _vtype = VTYPE;
         //         unsigned<XLEN> _eew = vcfg_concatEEW(mew, width);
-        //         unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-        //         unsigned<XLEN> _vl = CSR[VL_ADDR];
-        //         unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+        //         unsigned<XLEN> _vstart = VSTART;
+        //         unsigned<XLEN> _vl = VL;
+        //         unsigned<XLEN> _vlen = VLENB*8;
 
         //         unsigned<XLEN> ret = etiss_vstore_encoded_unitstride(V, _vtype, vm, _eew, vs3, _vstart, _vlen, _vl, (unsigned<64>)X[rs1]); //V, MEM[-1],
         //         if(ret != 0){
-        //             CSR[VSTART_ADDR] = ret >> 8;
+        //             VSTART = ret >> 8;
         //             raise(0, 2);
         //         } else{
-        //             CSR[VSTART_ADDR] = 0;
+        //             VSTART = 0;
         //         }
         //     }
         // }
@@ -1847,18 +1847,18 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vtype = VTYPE;
                 unsigned<XLEN> _eew = vcfg_concatEEW(1'b0, 3'b000);
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = etiss_vstore_encoded_unitstride(V, _vtype, vm, _eew, vs3, _vstart, _vlen, _vl, (unsigned<64>)X[rs1]); //V, MEM[-1],
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -1868,18 +1868,18 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vtype = VTYPE;
                 unsigned<XLEN> _eew = vcfg_concatEEW(1'b0, 3'b101);
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = etiss_vstore_encoded_unitstride(V, _vtype, vm, _eew, vs3, _vstart, _vlen, _vl, (unsigned<64>)X[rs1]); //V, MEM[-1],
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -1889,18 +1889,18 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
+                unsigned<XLEN> _vtype = VTYPE;
                 unsigned<XLEN> _eew = vcfg_concatEEW(1'b0, 3'b110);
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = etiss_vstore_encoded_unitstride(V, _vtype, vm, _eew, vs3, _vstart, _vlen, _vl, (unsigned<64>)X[rs1]); //V, MEM[-1],
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2128,17 +2128,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vadd_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2148,17 +2148,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vadd_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2168,17 +2168,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs1)}, {imm}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vadd_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2189,17 +2189,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vsub_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2210,17 +2210,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-               unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-               unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-               unsigned<XLEN> _vl = CSR[VL_ADDR];
-               unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+               unsigned<XLEN> _vtype = VTYPE;
+               unsigned<XLEN> _vstart = VSTART;
+               unsigned<XLEN> _vl = VL;
+               unsigned<XLEN> _vlen = VLENB*8;
 
                unsigned<XLEN> ret = vsub_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                if(ret != 0){
-                   CSR[VSTART_ADDR] = ret >> 8;
+                   VSTART = ret >> 8;
                    raise(0, 2);
                } else{
-                   CSR[VSTART_ADDR] = 0;
+                   VSTART = 0;
                }
            }
         }
@@ -2289,17 +2289,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vwaddu_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2310,17 +2310,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vwaddu_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2330,17 +2330,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vwsubu_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2351,17 +2351,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vwsubu_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2372,17 +2372,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vwadd_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2393,17 +2393,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vwadd_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2414,17 +2414,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vwsub_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2435,17 +2435,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vwsub_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2538,17 +2538,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vwaddu_w_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2558,17 +2558,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vwaddu_w_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2578,17 +2578,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vwadd_w_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2598,17 +2598,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vwadd_w_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2618,17 +2618,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vwsubu_w_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2638,17 +2638,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vwsubu_w_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2658,17 +2658,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vwsub_w_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2678,17 +2678,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vwsub_w_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2698,17 +2698,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vand_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2718,17 +2718,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vand_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2738,17 +2738,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vand_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2758,17 +2758,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vor_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2778,17 +2778,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vor_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2798,17 +2798,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vor_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2817,17 +2817,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vxor_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2837,17 +2837,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vxor_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2857,17 +2857,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vxor_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2877,17 +2877,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vsll_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2897,17 +2897,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vsll_vi(V, _vtype, vm, vd, vs2, uimm5, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2917,17 +2917,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vsll_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2937,17 +2937,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vsrl_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2957,17 +2957,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vsrl_vi(V, _vtype, vm, vd, vs2, uimm5, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2977,17 +2977,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vsrl_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -2997,17 +2997,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vsra_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3017,17 +3017,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vsra_vi(V, _vtype, vm, vd, vs2, uimm5, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3037,17 +3037,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vsra_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3060,17 +3060,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vmseq_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3079,17 +3079,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vmseq_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3098,17 +3098,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vmseq_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3118,17 +3118,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vmsne_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3137,17 +3137,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vmsne_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3156,17 +3156,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vmsne_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3176,17 +3176,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vmsltu_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3195,17 +3195,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vmsltu_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3215,17 +3215,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vmslt_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3234,17 +3234,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vmslt_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3254,17 +3254,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vmsleu_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3273,17 +3273,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vmsleu_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3292,17 +3292,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(uimm5)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vmsleu_vi(V, _vtype, vm, vd, vs2, uimm5, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3312,17 +3312,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vmsle_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3331,17 +3331,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vmsle_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3350,17 +3350,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vmsle_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3371,17 +3371,17 @@ InstructionSet RVZve32x extends RVVBase {
         //    assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
         //    behavior: {
         //
-        //        unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-        //        unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-        //        unsigned<XLEN> _vl = CSR[VL_ADDR];
-        //        unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+        //        unsigned<XLEN> _vtype = VTYPE;
+        //        unsigned<XLEN> _vstart = VSTART;
+        //        unsigned<XLEN> _vl = VL;
+        //        unsigned<XLEN> _vlen = VLENB*8;
         //
         //        unsigned<XLEN> ret = vmsgtu_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
         //        if(ret != 0){
-        //            CSR[VSTART_ADDR] = ret >> 8;
+        //            VSTART = ret >> 8;
         //            raise(0, 2);
         //        } else{
-        //            CSR[VSTART_ADDR] = 0;
+        //            VSTART = 0;
         //        }
         //    }
         // }
@@ -3392,17 +3392,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vmsgtu_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3420,17 +3420,17 @@ InstructionSet RVZve32x extends RVVBase {
         //     assembly:"{name(vd)}, {name(vs2)}, {name(vs1)}, {name(vm)}";
         //     behavior: {
         //
-        //         unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-        //         unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-        //         unsigned<XLEN> _vl = CSR[VL_ADDR];
-        //         unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+        //         unsigned<XLEN> _vtype = VTYPE;
+        //         unsigned<XLEN> _vstart = VSTART;
+        //         unsigned<XLEN> _vl = VL;
+        //         unsigned<XLEN> _vlen = VLENB*8;
         //
         //         unsigned<XLEN> ret = vmsgt_vv(V, _vtype, vm, vd, vs1, vs2, _vstart, _vlen, _vl);
         //         if(ret != 0){
-        //             CSR[VSTART_ADDR] = ret >> 8;
+        //             VSTART = ret >> 8;
         //             raise(0, 2);
         //         } else{
-        //             CSR[VSTART_ADDR] = 0;
+        //             VSTART = 0;
         //         }
         //     }
         // }
@@ -3441,17 +3441,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vmsgt_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3463,17 +3463,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs1)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vmv_vv(V, _vtype, vd, vs1, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3483,17 +3483,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vmv_vx(V, X, _vtype, vd, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3503,17 +3503,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(simm5)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vmv_vi(V, _vtype, vd, simm5, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3638,18 +3638,18 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(rd)}, {name(vs2)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                //unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                //unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 if(rd != 0){
                     unsigned<XLEN> ret = vmv_xs(V, X, _vtype, rd, vs2, _vlen, _vl, XLEN);
                     if(ret != 0){
-                        CSR[VSTART_ADDR] = ret >> 8;
+                        VSTART = ret >> 8;
                         raise(0, 2);
                     } else{
-                        CSR[VSTART_ADDR] = 0;
+                        VSTART = 0;
                     }
                 }
             }
@@ -3659,17 +3659,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(rs1)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vmv_sx(V, X, _vtype, vd, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3678,17 +3678,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vslideup_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3698,17 +3698,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vslideup_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3720,17 +3720,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(simm5)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vslidedown_vi(V, _vtype, vm, vd, vs2, simm5, _vstart, _vlen, _vl);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3740,17 +3740,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vslidedown_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3760,17 +3760,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vslide1up_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3780,17 +3780,17 @@ InstructionSet RVZve32x extends RVVBase {
             assembly:"{name(vd)}, {name(vs2)}, {name(rs1)}, {name(vm)}";
             behavior: {
 
-                unsigned<XLEN> _vtype = CSR[VTYPE_ADDR];
-                unsigned<XLEN> _vstart = CSR[VSTART_ADDR];
-                unsigned<XLEN> _vl = CSR[VL_ADDR];
-                unsigned<XLEN> _vlen = CSR[VLENB_ADDR]*8;
+                unsigned<XLEN> _vtype = VTYPE;
+                unsigned<XLEN> _vstart = VSTART;
+                unsigned<XLEN> _vl = VL;
+                unsigned<XLEN> _vlen = VLENB*8;
 
                 unsigned<XLEN> ret = vslide1down_vx(V, X, _vtype, vm, vd, vs2, rs1, _vstart, _vlen, _vl, XLEN);
                 if(ret != 0){
-                    CSR[VSTART_ADDR] = ret >> 8;
+                    VSTART = ret >> 8;
                     raise(0, 2);
                 } else{
-                    CSR[VSTART_ADDR] = 0;
+                    VSTART = 0;
                 }
             }
         }
@@ -3803,24 +3803,17 @@ InstructionSet RVVBase extends Zicsr {
     architectural_state {
         unsigned<32> VLEN = 1024;
         // user-writeable
-        unsigned<32> VSTART_ADDR = 0x008;
-        unsigned<32>& VSTART_CSR = CSR[VSTART_ADDR];
-        unsigned<32> VXSAT_ADDR = 0x009;
-        unsigned<32>& VXSAT_CSR = CSR[VXSAT_ADDR];
-        unsigned<32> VXRM_ADDR = 0x00A;
-        unsigned<32>& VXRM_CSR = CSR[VXRM_ADDR];
-        unsigned<32> VCSR_ADDR = 0x00F;
-        unsigned<32>& VCSR_CSR = CSR[VCSR_ADDR];
+        unsigned<32>& VSTART = CSR[RV_CSR_VSTART];
+        unsigned<32>& VXSAT = CSR[RV_CSR_VXSAT];
+        unsigned<32>& VXRM = CSR[RV_CSR_VXRM];
+        unsigned<32>& VCSR = CSR[RV_CSR_VCSR];
 
         // not user-writable
-        unsigned<32> VL_ADDR = 0xC20;
-        unsigned<32>& VL_CSR = CSR[VL_ADDR];
-        unsigned<32> VTYPE_ADDR = 0xC21;
-        unsigned<32>& VTYPE_CSR = CSR[VTYPE_ADDR];
+        unsigned<32>& VL = CSR[RV_CSR_VL];
+        unsigned<32>& VTYPE = CSR[RV_CSR_VTYPE];
 
         // read-only constant csr
-        unsigned<32> VLENB_ADDR = 0xC22;
-        unsigned<32>& VLENB_CSR = CSR[VLENB_ADDR];
+        unsigned<32>& VLENB = CSR[RV_CSR_VLENB];
 
         // vector register address space
         extern unsigned char V[VLEN * 32];
