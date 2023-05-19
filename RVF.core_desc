@@ -8,6 +8,8 @@ InstructionSet RV32F extends Zicsr {
 
         register unsigned<FLEN> F[32] [[is_float_reg]];
         unsigned<XLEN>& FCSR = CSR[RV_CSR_FCSR];
+        unsigned<XLEN>& FFLAGS = CSR[RV_CSR_FFLAGS];
+        unsigned<XLEN>& FRM = CSR[RV_CSR_FRM];
 
         unsigned<FLEN>& FT0 = F[0];
         unsigned<FLEN>& FT1 = F[1];
